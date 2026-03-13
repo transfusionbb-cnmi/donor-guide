@@ -6,82 +6,139 @@
     <title>Blood Donation Search</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f9; }
-        .nav-header { background: #1e3799; color: white; padding: 60px 20px 80px; text-align: center; }
-        .search-box { 
-            border-radius: 50px; 
-            border: 2px solid #1e3799; 
-            padding: 15px 30px; 
-            margin-top: -35px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            font-size: 1.2rem;
+        .nav-header { background: #1e3799; color: white; padding: 50px 20px 70px; text-align: center; }
+        
+        /* สไตล์ช่องค้นหา */
+        .search-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: -40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
+        .search-input {
+            border-radius: 10px;
+            padding: 12px 20px;
+            border: 1px solid #dee2e6;
+            font-size: 1.1rem;
+        }
+
+        /* ปุ่มค้นหา (สีแดงตามแบบ) */
+        .btn-search {
+            background-color: #d32f2f;
+            color: white;
+            border-radius: 10px;
+            padding: 10px 30px;
+            font-weight: 600;
+            border: none;
+            flex-grow: 1;
+            transition: 0.2s;
+        }
+        .btn-search:hover { background-color: #b71c1c; color: white; }
+
+        /* ปุ่มล้างข้อมูล (สีน้ำเงินตามแบบ) */
+        .btn-clear {
+            background-color: white;
+            color: #1e3799;
+            border: 2px solid #1e3799;
+            border-radius: 10px;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-clear:hover { background-color: #f0f2f5; }
+
+        /* การ์ดผลลัพธ์ */
         .result-card { border: none; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); background: white; }
         .badge-cat { background: #4a69bd; color: white; padding: 4px 12px; border-radius: 5px; font-size: 0.8rem; }
         .criteria-section { background: #fffcf0; padding: 15px; border-radius: 10px; border: 1px dashed #f1c40f; margin: 15px 0; }
         .script-th { border-left: 4px solid #27ae60; background: #fafffa; padding: 15px; margin-top: 10px; }
         .script-en { border-left: 4px solid #2980b9; background: #f0f7ff; padding: 15px; margin-top: 10px; font-style: italic; }
         .label { font-weight: 600; color: #1e3799; font-size: 0.9rem; margin-bottom: 5px; }
-        .welcome-msg { color: #636e72; margin-top: 50px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="nav-header">
-    <h2 class="fw-bold">ระบบสืบค้นเกณฑ์การรับบริจาคโลหิต</h2>
-    <p class="opacity-75">โรงพยาบาลรามาธิบดีจักรีนฤบดินทร์</p>
+    <h3 class="fw-bold">CNMI Blood Donation</h3>
+    <p class="opacity-75">ห้องรับบริจาคโลหิต รามาธิบดีจักรีนฤบดินทร์</p>
 </div>
 
 <div class="container pb-5">
     <div class="row justify-content-center">
-        <div class="col-md-9">
-            <input type="text" id="searchInput" class="form-control search-box" placeholder="พิมพ์คำที่ต้องการค้นหา... (เช่น ความดัน, ยา, อายุ)">
+        <div class="col-md-7">
             
-            <div id="welcome" class="welcome-msg">
-                <p>🔍 เริ่มพิมพ์เพื่อค้นหาเกณฑ์การคัดกรอง</p>
+            <div class="search-container">
+                <label class="fw-bold mb-2">ระบุคำที่ต้องการสืบค้น</label>
+                <input type="text" id="searchInput" class="form-control search-input mb-4" placeholder="เช่น ความดัน, ยา, อายุ, ต่างชาติ">
+                
+                <div class="d-flex gap-2">
+                    <button id="searchBtn" class="btn-search">
+                        <i class="bi bi-search me-2"></i> ค้นหาข้อมูล
+                    </button>
+                    <button id="clearBtn" class="btn-clear" title="ล้างข้อมูล">
+                        <i class="bi bi-arrow-clockwise fs-4"></i>
+                    </button>
+                </div>
             </div>
 
             <div id="results" class="mt-4"></div>
+            <div id="loading" class="text-center mt-4" style="display:none;">
+                <div class="spinner-border text-primary" role="status"></div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
     let rawData = [];
+    // 🚩 อย่าลืมเปลี่ยน URL เป็นของตัวเองนะครับ
     const GAS_URL = 'ใส่_WEB_APP_URL_ของคุณที่นี่'; 
 
     window.onload = () => {
         fetch(GAS_URL)
             .then(res => res.json())
-            .then(data => {
-                rawData = data;
-                console.log("Data Loaded");
-            });
+            .then(data => { rawData = data; });
     };
 
-    document.getElementById('searchInput').addEventListener('input', function(e) {
-        const keyword = e.target.value.toLowerCase();
-        const welcome = document.getElementById('welcome');
+    // ฟังก์ชันค้นหา
+    function performSearch() {
+        const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+        const container = document.getElementById('results');
         
-        // ถ้าไม่มีคำค้นหา ให้ล้างหน้าจอ
-        if (keyword.length === 0) {
-            document.getElementById('results').innerHTML = '';
-            welcome.style.display = 'block';
+        if (!keyword) {
+            container.innerHTML = '<div class="text-center p-4 text-muted">กรุณากรอกคำที่ต้องการค้นหา</div>';
             return;
         }
 
-        welcome.style.display = 'none';
-
-        // ค้นหาจาก Column หัวข้อ และ คำค้นหา
         const filtered = rawData.filter(item => {
-            // ดึงข้อมูลแบบ Key-Value
-            const title = String(Object.values(item)[1]).toLowerCase(); // คอลัมน์ B (หัวข้อ)
-            const searchTag = String(Object.values(item)[2]).toLowerCase(); // คอลัมน์ C (คำที่ใช้ค้นหา)
+            const vals = Object.values(item);
+            const title = String(vals[1]).toLowerCase(); // คอลัมน์ B
+            const searchTag = String(vals[2]).toLowerCase(); // คอลัมน์ C
             return title.includes(keyword) || searchTag.includes(keyword);
         });
 
         render(filtered);
+    }
+
+    // กดปุ่มค้นหา
+    document.getElementById('searchBtn').addEventListener('click', performSearch);
+
+    // กด Enter ในช่อง Input
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') performSearch();
+    });
+
+    // ปุ่มล้างข้อมูล
+    document.getElementById('clearBtn').addEventListener('click', () => {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('results').innerHTML = '';
+        document.getElementById('searchInput').focus();
     });
 
     function render(data) {
@@ -92,10 +149,9 @@
         }
 
         container.innerHTML = data.map(item => {
-            // ดึงข้อมูลตามลำดับคอลัมน์ เพื่อความแม่นยำ (A=0, B=1, ...)
             const vals = Object.values(item);
             return `
-            <div class="card result-card">
+            <div class="card result-card animate__animated animate__fadeIn">
                 <div class="card-body p-4">
                     <span class="badge-cat mb-2">${vals[0]}</span>
                     <h4 class="text-primary fw-bold mb-3">${vals[1]}</h4>
