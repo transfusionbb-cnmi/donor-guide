@@ -19,8 +19,9 @@
         .badge-cat { background: #1e3799; color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 10px; display: inline-block; }
         .criteria-section { background: #fffcf0; padding: 15px; border-radius: 10px; border: 1px dashed #f1c40f; margin: 15px 0; }
         .script-th { border-left: 5px solid #27ae60; background: #f4faf6; padding: 15px; margin-top: 15px; border-radius: 0 10px 10px 0; }
-        .script-en { border-left: 5px solid #2980b9; background: #f0f7ff; padding: 15px; margin-top: 10px; border-radius: 0 10px 10px 0; font-style: italic; }
-        .label { font-weight: 600; color: #1e3799; font-size: 0.95rem; margin-bottom: 5px; display: block; }
+        .script-en { border-left: 5px solid #2980b9; background: #f0f7ff; padding: 15px; margin-top: 10px; border-radius: 0 10px 10px 0;font-style: italic; }
+        .label { font-weight: 600; color: #1e3799; font-size: 0.95rem; margin-bottom: 5px; display: block;}
+        .preserve-breaks { white-space: pre-wrap; word-wrap: break-word; }
         #status-bar { font-size: 0.8rem; text-align: center; margin-top: 10px; color: #7f8c8d; }
     </style>
 </head>
@@ -95,30 +96,30 @@
             return;
         }
 
-        container.innerHTML = data.map(item => {
+container.innerHTML = data.map(item => {
             const v = Object.values(item); 
-            // ลำดับคอลัมน์ A=0, B=1, C=2, D=3, E=4, F=5, G=6
             return `
-            <div class="card result-card shadow-sm">
+            <div class="card result-card">
                 <div class="card-body">
                     <span class="badge-cat">${v[0] || 'ข้อมูลทั่วไป'}</span>
                     <h4 class="text-primary fw-bold mb-3">${v[1] || ''}</h4>
                     
                     <div class="criteria-section">
                         <span class="label">📍 เกณฑ์การคัดกรอง</span>
-                        <div class="text-dark mb-2">${v[3] || '-'}</div>
+                        <div class="text-dark mb-2 preserve-breaks">${v[3] || '-'}</div>
+                        
                         <span class="label">⏳ ระยะเวลางดบริจาค</span>
-                        <div class="text-danger fw-bold">${v[4] || 'ไม่มีกำหนดงด'}</div>
+                        <div class="text-danger fw-bold preserve-breaks">${v[4] || 'ไม่มีกำหนดงด'}</div>
                     </div>
 
                     <div class="script-th">
                         <span class="label text-success">🇹🇭 TH SCRIPT สำหรับเจ้าหน้าที่</span>
-                        <div class="small">${v[5] && v[5] !== "-" ? v[5] : '<span class="text-muted">ไม่มีข้อมูลบทพูด</span>'}</div>
+                        <div class="small preserve-breaks">${v[5] && v[5] !== "-" ? v[5] : 'ไม่มีข้อมูลบทพูด'}</div>
                     </div>
 
                     <div class="script-en">
                         <span class="label text-primary">🇺🇸 ENGLISH SCRIPT</span>
-                        <div class="small">${v[6] && v[6] !== "-" ? v[6] : '<span class="text-muted">No script available</span>'}</div>
+                        <div class="small preserve-breaks">${v[6] && v[6] !== "-" ? v[6] : 'No script available'}</div>
                     </div>
                 </div>
             </div>`;
