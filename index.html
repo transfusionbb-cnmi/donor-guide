@@ -3,63 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Donation Search</title>
+    <title>Blood Donation Search - CNMI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f9; }
-        .nav-header { background: #1e3799; color: white; padding: 50px 20px 70px; text-align: center; }
+        .nav-header { background: #1e3799; color: white; padding: 40px 20px 60px; text-align: center; }
         
-        /* สไตล์ช่องค้นหา */
         .search-container {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin-top: -40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: white; padding: 30px; border-radius: 20px;
+            margin-top: -30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        .search-input {
-            border-radius: 10px;
-            padding: 12px 20px;
-            border: 1px solid #dee2e6;
-            font-size: 1.1rem;
-        }
+        .search-input { border-radius: 10px; padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem; }
 
-        /* ปุ่มค้นหา (สีแดงตามแบบ) */
+        /* ปุ่มสีแดงแบบในตัวอย่าง */
         .btn-search {
-            background-color: #d32f2f;
-            color: white;
-            border-radius: 10px;
-            padding: 10px 30px;
-            font-weight: 600;
-            border: none;
-            flex-grow: 1;
-            transition: 0.2s;
+            background-color: #d32f2f; color: white; border-radius: 10px;
+            padding: 12px; font-weight: 600; border: none; flex-grow: 1;
         }
         .btn-search:hover { background-color: #b71c1c; color: white; }
 
-        /* ปุ่มล้างข้อมูล (สีน้ำเงินตามแบบ) */
+        /* ปุ่มล้างข้อมูลสีฟ้า */
         .btn-clear {
-            background-color: white;
-            color: #1e3799;
-            border: 2px solid #1e3799;
-            border-radius: 10px;
-            width: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
+            background-color: white; color: #1e3799; border: 2px solid #1e3799;
+            border-radius: 10px; width: 55px; display: flex; align-items: center; justify-content: center;
         }
-        .btn-clear:hover { background-color: #f0f2f5; }
 
         /* การ์ดผลลัพธ์ */
-        .result-card { border: none; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); background: white; }
-        .badge-cat { background: #4a69bd; color: white; padding: 4px 12px; border-radius: 5px; font-size: 0.8rem; }
+        .result-card { border: none; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); background: white; overflow: hidden; }
+        .card-body { padding: 25px; }
+        .badge-cat { background: #1e3799; color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 10px; display: inline-block; }
+        
         .criteria-section { background: #fffcf0; padding: 15px; border-radius: 10px; border: 1px dashed #f1c40f; margin: 15px 0; }
-        .script-th { border-left: 4px solid #27ae60; background: #fafffa; padding: 15px; margin-top: 10px; }
-        .script-en { border-left: 4px solid #2980b9; background: #f0f7ff; padding: 15px; margin-top: 10px; font-style: italic; }
-        .label { font-weight: 600; color: #1e3799; font-size: 0.9rem; margin-bottom: 5px; }
+        .script-th { border-left: 5px solid #27ae60; background: #f4faf6; padding: 15px; margin-top: 15px; border-radius: 0 10px 10px 0; }
+        .script-en { border-left: 5px solid #2980b9; background: #f0f7ff; padding: 15px; margin-top: 10px; border-radius: 0 10px 10px 0; font-style: italic; }
+        
+        .label { font-weight: 600; color: #1e3799; font-size: 0.95rem; margin-bottom: 5px; display: block; }
+        #welcome-screen { text-align: center; padding: 50px 20px; color: #95a5a6; }
     </style>
 </head>
 <body>
@@ -71,75 +52,66 @@
 
 <div class="container pb-5">
     <div class="row justify-content-center">
-        <div class="col-md-7">
+        <div class="col-md-8">
             
             <div class="search-container">
                 <label class="fw-bold mb-2">ระบุคำที่ต้องการสืบค้น</label>
-                <input type="text" id="searchInput" class="form-control search-input mb-4" placeholder="เช่น ความดัน, ยา, อายุ, ต่างชาติ">
+                <input type="text" id="searchInput" class="form-control search-input mb-3" placeholder="เช่น ความดัน, ยา, อายุ, ต่างชาติ, ...">
                 
                 <div class="d-flex gap-2">
                     <button id="searchBtn" class="btn-search">
                         <i class="bi bi-search me-2"></i> ค้นหาข้อมูล
                     </button>
-                    <button id="clearBtn" class="btn-clear" title="ล้างข้อมูล">
+                    <button id="clearBtn" class="btn-clear">
                         <i class="bi bi-arrow-clockwise fs-4"></i>
                     </button>
                 </div>
             </div>
 
-            <div id="results" class="mt-4"></div>
-            <div id="loading" class="text-center mt-4" style="display:none;">
-                <div class="spinner-border text-primary" role="status"></div>
+            <div id="results" class="mt-4">
+                <div id="welcome-screen">
+                    <i class="bi bi-search" style="font-size: 3rem;"></i>
+                    <p class="mt-3">กรุณาระบุคำค้นหาเพื่อแสดงเกณฑ์การรับบริจาค</p>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
 
 <script>
     let rawData = [];
-    // 🚩 อย่าลืมเปลี่ยน URL เป็นของตัวเองนะครับ
-    const GAS_URL = 'ใส่_WEB_APP_URL_ของคุณที่นี่'; 
+    // 🚩 เปลี่ยนเป็น Web App URL ของคุณมัส
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxhfP1zqL5k_IBo4vDpRQpVAuoha2QFMFCi7RGu9M2Cl0Nq0vWrWPhS86z2FQjvbbuR/exec'; 
 
     window.onload = () => {
         fetch(GAS_URL)
             .then(res => res.json())
-            .then(data => { rawData = data; });
+            .then(data => { 
+                rawData = data; 
+                console.log("Data loaded successfully");
+            });
     };
 
-    // ฟังก์ชันค้นหา
     function performSearch() {
-        const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-        const container = document.getElementById('results');
-        
+        const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+        const resultsDiv = document.getElementById('results');
+
         if (!keyword) {
-            container.innerHTML = '<div class="text-center p-4 text-muted">กรุณากรอกคำที่ต้องการค้นหา</div>';
+            resultsDiv.innerHTML = '<div id="welcome-screen"><p>กรุณาระบุคำค้นหา</p></div>';
             return;
         }
 
+        // ค้นหาจากคอลัมน์ หัวข้อ (index 1) และ คำที่ใช้ค้นหา (index 2)
         const filtered = rawData.filter(item => {
             const vals = Object.values(item);
-            const title = String(vals[1]).toLowerCase(); // คอลัมน์ B
-            const searchTag = String(vals[2]).toLowerCase(); // คอลัมน์ C
-            return title.includes(keyword) || searchTag.includes(keyword);
+            const title = String(vals[1] || "").toLowerCase();
+            const tags = String(vals[2] || "").toLowerCase();
+            return title.includes(keyword) || tags.includes(keyword);
         });
 
         render(filtered);
     }
-
-    // กดปุ่มค้นหา
-    document.getElementById('searchBtn').addEventListener('click', performSearch);
-
-    // กด Enter ในช่อง Input
-    document.getElementById('searchInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') performSearch();
-    });
-
-    // ปุ่มล้างข้อมูล
-    document.getElementById('clearBtn').addEventListener('click', () => {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('results').innerHTML = '';
-        document.getElementById('searchInput').focus();
-    });
 
     function render(data) {
         const container = document.getElementById('results');
@@ -149,34 +121,43 @@
         }
 
         container.innerHTML = data.map(item => {
-            const vals = Object.values(item);
+            const v = Object.values(item); 
+            // ลำดับคอลัมน์: 0=หมวดหมู่, 1=หัวข้อ, 3=เกณฑ์, 4=งด, 5=Scriptไทย, 6=ScriptEng
             return `
-            <div class="card result-card animate__animated animate__fadeIn">
-                <div class="card-body p-4">
-                    <span class="badge-cat mb-2">${vals[0]}</span>
-                    <h4 class="text-primary fw-bold mb-3">${vals[1]}</h4>
+            <div class="card result-card">
+                <div class="card-body">
+                    <span class="badge-cat">${v[0] || 'ทั่วไป'}</span>
+                    <h4 class="text-primary fw-bold mb-3">${v[1] || ''}</h4>
                     
                     <div class="criteria-section">
-                        <div class="label">📍 เกณฑ์การคัดกรอง</div>
-                        <div class="text-dark mb-3">${vals[3] || '-'}</div>
-                        <div class="label">⏳ ระยะเวลางดบริจาค</div>
-                        <div class="text-danger fw-bold">${vals[4] || 'ไม่มีกำหนดงด'}</div>
+                        <span class="label">📍 เกณฑ์การคัดกรอง</span>
+                        <div class="text-dark mb-3">${v[3] || '-'}</div>
+                        <span class="label">⏳ ระยะเวลางดบริจาค</span>
+                        <div class="text-danger fw-bold">${v[4] || 'ไม่มีกำหนดงด'}</div>
                     </div>
 
                     <div class="script-th">
-                        <div class="label text-success">🇹🇭 SCRIPT สำหรับเจ้าหน้าที่</div>
-                        <div>${vals[5] || '-'}</div>
+                        <span class="label text-success">🇹🇭 TH SCRIPT สำหรับเจ้าหน้าที่</span>
+                        <div>${v[5] && v[5] !== "-" ? v[5] : '<span class="text-muted small">ไม่มีข้อมูลบทพูด</span>'}</div>
                     </div>
 
                     <div class="script-en">
-                        <div class="label text-primary">🇺🇸 ENGLISH SCRIPT</div>
-                        <div class="small">${vals[6] || '-'}</div>
+                        <span class="label text-primary">🇺🇸 ENGLISH SCRIPT</span>
+                        <div class="small">${v[6] && v[6] !== "-" ? v[6] : '<span class="text-muted small">No script available</span>'}</div>
                     </div>
                 </div>
             </div>
             `;
         }).join('');
     }
+
+    // Event Listeners
+    document.getElementById('searchBtn').onclick = performSearch;
+    document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') performSearch(); };
+    document.getElementById('clearBtn').onclick = () => {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('results').innerHTML = '<div id="welcome-screen"><i class="bi bi-search" style="font-size: 3rem;"></i><p class="mt-3">กรุณาระบุคำค้นหาเพื่อแสดงเกณฑ์การรับบริจาค</p></div>';
+    };
 </script>
 
 </body>
