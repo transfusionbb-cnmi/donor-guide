@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เกณฑ์การรับบริจาคโลหิต รามาธิบดีจักรีนฤบดินทร์</title>
+    <title>CNMI Blood Donor Criteria</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -13,92 +13,72 @@
         :root {
             --primary-navy: #1a2a6c;
             --medical-red: #d32f2f;
-            --soft-bg: #f8f9fa;
+            --soft-bg: #f0f2f5;
         }
 
         body { 
             font-family: 'Sarabun', sans-serif; 
             background-color: var(--soft-bg); 
             color: #2d3436; 
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* Header Gradient */
         .nav-header { 
             background: linear-gradient(135deg, #1a2a6c 0%, #2a48df 100%); 
-            color: white; padding: 40px 20px 60px; text-align: center;
+            color: white; padding: 50px 20px 70px; text-align: center;
             border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
-        /* กล่องค้นหาลอย */
+        /* กล่องค้นหาหน้าตาคล้ายเดิม */
         .search-container { 
-            background: white; padding: 25px; border-radius: 20px; 
-            margin-top: -35px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            border: 1px solid rgba(0,0,0,0.05);
+            background: white; padding: 30px; border-radius: 24px; 
+            margin-top: -45px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .search-input { 
-            border-radius: 12px; padding: 12px 15px; 
+            border-radius: 12px; padding: 15px; 
             border: 2px solid #eee; font-size: 1.1rem;
-            transition: 0.3s;
-        }
-        .search-input:focus { border-color: var(--primary-navy); box-shadow: none; }
-
-        .btn-search { 
-            background: var(--medical-red); color: white; border-radius: 12px; 
-            padding: 12px; font-weight: 600; border: none; flex-grow: 1;
-        }
-        .btn-clear { 
-            background: white; color: var(--primary-navy); border: 2px solid var(--primary-navy); 
-            border-radius: 12px; width: 50px;
+            margin-bottom: 15px;
         }
 
-        /* --- สไตล์แบบรายการ (List View) --- */
+        /* ปรับปุ่มให้มาอยู่ด้านล่าง */
+        .btn-row { display: flex; gap: 10px; }
+
+        .btn-search-main { 
+            background: linear-gradient(to right, #e53935, #d32f2f);
+            color: white; border-radius: 12px; padding: 12px; 
+            font-weight: 600; border: none; flex: 2;
+            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2);
+        }
+
+        .btn-clear-main { 
+            background: white; color: var(--primary-navy); 
+            border: 2px solid var(--primary-navy); 
+            border-radius: 12px; padding: 12px; 
+            font-weight: 600; flex: 1;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+        }
+
+        /* การแสดงผลรายการ (List View) */
         .list-item-card {
-            background: white; border-radius: 16px; padding: 18px 22px;
+            background: white; border-radius: 16px; padding: 20px;
             margin-bottom: 12px; cursor: pointer; border: 1px solid #f0f0f0;
             display: flex; justify-content: space-between; align-items: center;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
         }
-        .list-item-card:hover { 
-            transform: translateX(8px); 
-            border-left: 6px solid var(--primary-navy);
-            background: #fdfdfd;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .list-item-card h5 { margin: 0; font-weight: 700; color: #333; font-size: 1.1rem; }
-        .list-badge { 
-            background: rgba(26, 42, 108, 0.08); color: var(--primary-navy); 
-            padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700;
-        }
+        .list-item-card:hover { transform: translateX(5px); border-left: 5px solid var(--primary-navy); }
+        .list-item-card h5 { margin: 0; font-weight: 700; color: #333; }
+        .list-badge { background: rgba(26, 42, 108, 0.08); color: var(--primary-navy); padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
 
-        /* --- สไตล์หน้าละเอียด (Detail View) --- */
-        .detail-view { display: none; } /* ซ่อนไว้ก่อน */
-        .btn-back { 
-            background: #fff; border: 1px solid #ddd; padding: 8px 16px; 
-            border-radius: 50px; color: #555; font-weight: 600;
-            margin-bottom: 20px; transition: 0.2s;
-        }
-        .btn-back:hover { background: #eee; color: #000; }
-
-        .full-card { 
-            border: none; border-radius: 25px; background: white; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden;
-        }
-        .criteria-box { 
-            background: #fffcf0; padding: 25px; border-radius: 18px; 
-            border-left: 6px solid #f1c40f; margin: 20px 0; 
-        }
-
-        /* หัวข้อ 1. 2. 3. */
-        .highlight-header { 
-            font-weight: 700; font-size: 1.2rem; color: var(--primary-navy); 
-            display: block; margin-top: 20px; margin-bottom: 8px;
-            border-bottom: 1px solid #eee; padding-bottom: 5px;
-        }
+        /* หน้าละเอียด */
+        .detail-view { display: none; }
+        .btn-back { background: #fff; border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px; color: #555; font-weight: 600; margin-bottom: 20px; }
+        .full-card { border: none; border-radius: 25px; background: white; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        .criteria-box { background: #fffcf0; padding: 25px; border-radius: 18px; border-left: 6px solid #f1c40f; margin: 20px 0; }
+        
+        /* Newline & Bold */
         .preserve-breaks { white-space: pre-wrap; line-height: 1.8; font-size: 1.05rem; }
-
+        .highlight-header { font-weight: 700; font-size: 1.2rem; color: var(--primary-navy); display: block; margin-top: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        
         .script-box-th { border-left: 6px solid #27ae60; background: #f4faf6; padding: 20px; border-radius: 12px; margin-top: 15px; }
         .script-box-en { border-left: 6px solid #2980b9; background: #f0f7ff; padding: 20px; border-radius: 12px; margin-top: 10px; font-style: italic; }
 
@@ -108,10 +88,8 @@
 <body>
 
 <div class="nav-header">
-    <div class="animate__animated animate__fadeIn">
-        <h3 class="fw-bold m-0">เกณฑ์การรับ ผู้บริจาคโลหิต</h3>
-        <p class="opacity-75 small">ห้องรับบริจาคโลหิต รามาธิบดีจักรีนฤบดินทร์</p>
-    </div>
+    <h3 class="fw-bold m-0">คัดกรอง ผู้บริจาคโลหิต</h3>
+    <p class="opacity-75 small">โรงพยาบาลรามาธิบดีจักรีนฤบดินทร์</p>
 </div>
 
 <div class="container pb-5">
@@ -119,20 +97,28 @@
         <div class="col-lg-8 col-md-10">
             
             <div id="search-section" class="search-container animate__animated animate__fadeInUp">
-                <label class="fw-bold mb-2 text-muted small">ระบุคำค้นหา (เช่น ชื่อโรค, ยา, อาการ)</label>
-                <div class="d-flex gap-2">
-                    <input type="text" id="searchInput" class="form-control search-input" placeholder="พิมพ์คำที่ต้องการค้นหา...">
-                    <button id="searchBtn" class="btn-search"><i class="bi bi-search"></i></button>
-                    <button id="clearBtn" class="btn-clear"><i class="bi bi-arrow-clockwise fs-5"></i></button>
+                <label class="fw-bold mb-2 text-muted small">ระบุคำที่ต้องการสืบค้น</label>
+                <input type="text" id="searchInput" class="form-control search-input" placeholder="พิมพ์ชื่อโรค, ยา, อาการ...">
+                
+                <div class="btn-row">
+                    <button id="searchBtn" class="btn-search-main">
+                        <i class="bi bi-search me-2"></i> ค้นหาข้อมูล
+                    </button>
+                    <button id="clearBtn" class="btn-clear-main">
+                        <i class="bi bi-arrow-clockwise"></i> ล้างข้อมูล
+                    </button>
                 </div>
-                <div id="status-bar">กำลังโหลดฐานข้อมูล...</div>
+                <div id="status-bar">กำลังเชื่อมต่อฐานข้อมูล...</div>
             </div>
 
             <div id="list-area" class="mt-4">
+                <div class="text-center p-5 text-muted" id="welcome-msg">
+                    <i class="bi bi-search" style="font-size: 3rem; opacity: 0.2;"></i>
+                    <p class="mt-3">กรุณาระบุคำค้นหาเพื่อแสดงข้อมูล</p>
                 </div>
+            </div>
 
-            <div id="detail-area" class="detail-view mt-4 animate__animated animate__fadeIn">
-                </div>
+            <div id="detail-area" class="detail-view mt-4 animate__animated animate__fadeIn"></div>
 
         </div>
     </div>
@@ -140,52 +126,48 @@
 
 <script>
     let rawData = [];
-    let currentResults = []; // เก็บผลลัพธ์ที่เสิชได้
+    let currentFiltered = [];
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxfT7UBjj3x6ywVOnIs2BnfRBTiAWMnHX4djVNWdioDv_KwVjCHtqXR62f2zsifK4-I/exec'; 
 
     window.onload = () => {
         fetch(GAS_URL).then(res => res.json()).then(data => { 
             rawData = data; 
-            document.getElementById('status-bar').innerHTML = `<i class="bi bi-check-circle text-success"></i> พร้อมสืบค้น ${data.length} รายการ`;
+            document.getElementById('status-bar').innerHTML = `<i class="bi bi-check-circle text-success"></i> พร้อมใช้งาน ${data.length} รายการ`;
         });
     };
 
-    // ฟังก์ชันทำตัวหนาและใหญ่สำหรับหัวข้อ 1. 2. 3.
-    function formatContent(text) {
+    function formatText(text) {
         if (!text || text === "-") return text;
-        // ปรับหัวข้อที่มีเลขตามด้วย : ให้ใหญ่และหนา
         return text.replace(/(\d+\.[^:\n\r]+[:：])/g, '<span class="highlight-header">$1</span>');
     }
 
     function doSearch() {
         const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
         if (!keyword) return;
-
-        currentResults = rawData.filter(item => JSON.stringify(item).toLowerCase().includes(keyword));
-        showListView();
+        currentFiltered = rawData.filter(item => JSON.stringify(item).toLowerCase().includes(keyword));
+        renderListView();
     }
 
-    // --- แสดงแบบรายการ (List View) ---
-    function showListView() {
+    function renderListView() {
         const listArea = document.getElementById('list-area');
         const detailArea = document.getElementById('detail-area');
         const searchSection = document.getElementById('search-section');
 
-        searchSection.style.display = 'block'; // โชว์ช่องค้นหา
-        detailArea.style.display = 'none';    // ซ่อนหน้าละเอียด
-        listArea.style.display = 'block';     // โชว์หน้ารายการ
+        searchSection.style.display = 'block';
+        detailArea.style.display = 'none';
+        listArea.style.display = 'block';
 
-        if (currentResults.length === 0) {
-            listArea.innerHTML = '<div class="text-center p-5 text-muted">ไม่พบข้อมูล</div>';
+        if (currentFiltered.length === 0) {
+            listArea.innerHTML = '<div class="text-center p-5 text-muted">ไม่พบข้อมูล กรุณาลองใช้คำค้นหาอื่น</div>';
             return;
         }
 
         listArea.innerHTML = `
-            <p class="text-muted small mb-3">พบผลลัพธ์ ${currentResults.length} รายการ:</p>
-            ${currentResults.map((item, index) => {
+            <p class="text-muted small mb-3">พบผลลัพธ์ ${currentFiltered.length} รายการ:</p>
+            ${currentFiltered.map((item, index) => {
                 const v = Object.values(item);
                 return `
-                <div class="list-item-card animate__animated animate__fadeInUp" style="animation-delay: ${index * 0.05}s" onclick="showDetailView(${index})">
+                <div class="list-item-card animate__animated animate__fadeInUp" style="animation-delay: ${index * 0.05}s" onclick="renderDetailView(${index})">
                     <div>
                         <span class="list-badge mb-1 d-inline-block">${v[0] || 'ข้อมูล'}</span>
                         <h5>${v[1]}</h5>
@@ -195,57 +177,64 @@
             }).join('')}`;
     }
 
-    // --- แสดงแบบละเอียด (Detail View) ---
-    function showDetailView(index) {
-        const item = currentResults[index];
+    function renderDetailView(index) {
+        const item = currentFiltered[index];
         const v = Object.values(item);
         const listArea = document.getElementById('list-area');
         const detailArea = document.getElementById('detail-area');
         const searchSection = document.getElementById('search-section');
 
-        searchSection.style.display = 'none'; // ซ่อนช่องค้นหาเพื่อความโปร
-        listArea.style.display = 'none';      // ซ่อนรายการ
-        detailArea.style.display = 'block';    // โชว์หน้าละเอียด
+        searchSection.style.display = 'none';
+        listArea.style.display = 'none';
+        detailArea.style.display = 'block';
 
         detailArea.innerHTML = `
-            <button class="btn-back" onclick="showListView()">
+            <button class="btn-back" onclick="renderListView()">
                 <i class="bi bi-arrow-left me-2"></i> ย่อกลับไปดูรายการอื่น
             </button>
-            
-            <div class="full-card card p-4 animate__animated animate__zoomIn">
+            <div class="full-card card p-4 shadow-sm">
                 <span class="list-badge mb-2" style="width:fit-content">${v[0] || 'CRITERIA'}</span>
                 <h2 class="fw-bold mb-4" style="color: var(--primary-navy)">${v[1]}</h2>
-                
                 <div class="criteria-box">
-                    <div class="text-primary fw-bold small mb-2"><i class="bi bi-info-circle-fill me-1"></i> เกณฑ์การคัดกรอง</div>
-                    <div class="preserve-breaks">${formatContent(v[3])}</div>
-                    
+                    <div class="label fw-bold text-primary small mb-2"><i class="bi bi-info-circle-fill me-1"></i> เกณฑ์การคัดกรอง</div>
+                    <div class="preserve-breaks">${formatText(v[3])}</div>
                     <div class="mt-4 pt-3 border-top">
-                        <div class="text-danger fw-bold small mb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i> ระยะเวลางดบริจาค</div>
-                        <div class="text-danger fw-bold fs-4">${formatContent(v[4])}</div>
+                        <div class="label fw-bold text-danger small mb-2"><i class="bi bi-clock-history me-1"></i> ระยะเวลางดบริจาค</div>
+                        <div class="text-danger fw-bold fs-4">${formatText(v[4])}</div>
                     </div>
                 </div>
-
                 <div class="script-box-th">
                     <div class="text-success fw-bold small mb-2"><i class="bi bi-mic-fill me-1"></i> บทพูดเจ้าหน้าที่ (TH)</div>
-                    <div class="preserve-breaks small text-muted">${v[5] && v[5] !== "-" ? formatContent(v[5]) : 'ไม่มีข้อมูล'}</div>
+                    <div class="preserve-breaks small text-muted">${v[5] && v[5] !== "-" ? formatText(v[5]) : 'ไม่มีข้อมูล'}</div>
                 </div>
-
                 <div class="script-box-en">
                     <div class="text-primary fw-bold small mb-2"><i class="bi bi-translate me-1"></i> English Script</div>
-                    <div class="preserve-breaks small text-muted">${v[6] && v[6] !== "-" ? v[6] : 'No script available'}</div>
+                    <div class="preserve-breaks small text-muted">${v[6] && v[6] !== "-" ? v[6] : 'No script'}</div>
                 </div>
             </div>`;
         window.scrollTo(0,0);
     }
 
+    // ฟังก์ชันล้างข้อมูลแบบสมบูรณ์
+    function clearAll() {
+        document.getElementById('searchInput').value = ''; // ล้างข้อความในช่องเสิช
+        currentFiltered = []; // ล้างอาเรย์ที่เก็บผลลัพธ์
+        
+        // รีเซ็ตหน้ากลับไปเป็น Welcome Screen
+        document.getElementById('search-section').style.display = 'block';
+        document.getElementById('detail-area').style.display = 'none';
+        document.getElementById('list-area').style.display = 'block';
+        document.getElementById('list-area').innerHTML = `
+            <div class="text-center p-5 text-muted" id="welcome-msg">
+                <i class="bi bi-search" style="font-size: 3rem; opacity: 0.2;"></i>
+                <p class="mt-3">กรุณาระบุคำค้นหาเพื่อแสดงข้อมูล</p>
+            </div>`;
+        document.getElementById('searchInput').focus();
+    }
+
     document.getElementById('searchBtn').onclick = doSearch;
     document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') doSearch(); };
-    document.getElementById('clearBtn').onclick = () => {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('list-area').innerHTML = '';
-        showListView();
-    };
+    document.getElementById('clearBtn').onclick = clearAll;
 </script>
 </body>
 </html>
