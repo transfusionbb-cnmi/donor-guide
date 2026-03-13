@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสืบค้น เกณฑ์การรับบริจาคโลหิต | CNMI</title>
+    <title>เกณฑ์การรับบริจาคโลหิต รามาธิบดีจักรีนฤบดินทร์</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -11,298 +11,240 @@
     
     <style>
         :root {
-            --primary-color: #1a2a6c;
-            --accent-color: #d32f2f;
-            --bg-body: #f0f2f5;
-            --text-main: #2d3436;
+            --primary-navy: #1a2a6c;
+            --medical-red: #d32f2f;
+            --soft-bg: #f8f9fa;
         }
 
         body { 
             font-family: 'Sarabun', sans-serif; 
-            background-color: var(--bg-body); 
-            color: var(--text-main);
-            overflow-x: hidden;
+            background-color: var(--soft-bg); 
+            color: #2d3436; 
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Header ดีไซน์ใหม่แบบไล่เฉด */
+        /* Header Gradient */
         .nav-header { 
             background: linear-gradient(135deg, #1a2a6c 0%, #2a48df 100%); 
-            color: white; 
-            padding: 60px 20px 80px; 
-            text-align: center;
-            border-bottom-left-radius: 50% 20px;
-            border-bottom-right-radius: 50% 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            color: white; padding: 40px 20px 60px; text-align: center;
+            border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
-        /* กล่องค้นหาแบบลอยตัว */
+        /* กล่องค้นหาลอย */
         .search-container { 
-            background: white; 
-            padding: 35px; 
-            border-radius: 24px; 
-            margin-top: -50px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
+            background: white; padding: 25px; border-radius: 20px; 
+            margin-top: -35px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .search-input { 
-            border-radius: 12px; 
-            padding: 15px; 
-            border: 2px solid #edf2f7; 
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
+            border-radius: 12px; padding: 12px 15px; 
+            border: 2px solid #eee; font-size: 1.1rem;
+            transition: 0.3s;
         }
+        .search-input:focus { border-color: var(--primary-navy); box-shadow: none; }
 
-        .search-input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(26, 42, 108, 0.1);
-        }
-
-        /* ปุ่มดีไซน์ใหม่ */
         .btn-search { 
-            background: linear-gradient(to right, #e53935, #d32f2f);
-            color: white; 
-            border-radius: 12px; 
-            padding: 12px 25px; 
-            font-weight: 600; 
-            border: none; 
-            flex-grow: 1;
-            transition: all 0.3s transform ease;
-            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+            background: var(--medical-red); color: white; border-radius: 12px; 
+            padding: 12px; font-weight: 600; border: none; flex-grow: 1;
         }
-
-        .btn-search:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4);
-            color: white;
-        }
-
         .btn-clear { 
-            background-color: white; 
-            color: var(--primary-color); 
-            border: 2px solid var(--primary-color); 
-            border-radius: 12px; 
-            width: 55px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            transition: all 0.3s ease;
+            background: white; color: var(--primary-navy); border: 2px solid var(--primary-navy); 
+            border-radius: 12px; width: 50px;
         }
 
-        .btn-clear:hover { background-color: #f8f9fa; transform: rotate(-90deg); }
-
-        /* การ์ดผลลัพธ์แบบ Modern */
-        .result-card { 
-            border: none; 
-            border-radius: 20px; 
-            margin-bottom: 25px; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: white; 
-            overflow: hidden;
-            border: 1px solid #edf2f7;
+        /* --- สไตล์แบบรายการ (List View) --- */
+        .list-item-card {
+            background: white; border-radius: 16px; padding: 18px 22px;
+            margin-bottom: 12px; cursor: pointer; border: 1px solid #f0f0f0;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .list-item-card:hover { 
+            transform: translateX(8px); 
+            border-left: 6px solid var(--primary-navy);
+            background: #fdfdfd;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .list-item-card h5 { margin: 0; font-weight: 700; color: #333; font-size: 1.1rem; }
+        .list-badge { 
+            background: rgba(26, 42, 108, 0.08); color: var(--primary-navy); 
+            padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700;
         }
 
-        .result-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        /* --- สไตล์หน้าละเอียด (Detail View) --- */
+        .detail-view { display: none; } /* ซ่อนไว้ก่อน */
+        .btn-back { 
+            background: #fff; border: 1px solid #ddd; padding: 8px 16px; 
+            border-radius: 50px; color: #555; font-weight: 600;
+            margin-bottom: 20px; transition: 0.2s;
+        }
+        .btn-back:hover { background: #eee; color: #000; }
+
+        .full-card { 
+            border: none; border-radius: 25px; background: white; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden;
+        }
+        .criteria-box { 
+            background: #fffcf0; padding: 25px; border-radius: 18px; 
+            border-left: 6px solid #f1c40f; margin: 20px 0; 
         }
 
-        .badge-cat { 
-            background: rgba(26, 42, 108, 0.1); 
-            color: var(--primary-color); 
-            padding: 6px 16px; 
-            border-radius: 50px; 
-            font-size: 0.85rem; 
-            font-weight: 700;
-            margin-bottom: 12px; 
-            display: inline-block;
+        /* หัวข้อ 1. 2. 3. */
+        .highlight-header { 
+            font-weight: 700; font-size: 1.2rem; color: var(--primary-navy); 
+            display: block; margin-top: 20px; margin-bottom: 8px;
+            border-bottom: 1px solid #eee; padding-bottom: 5px;
         }
+        .preserve-breaks { white-space: pre-wrap; line-height: 1.8; font-size: 1.05rem; }
 
-        .criteria-section { 
-            background: #fffcf0; 
-            padding: 20px; 
-            border-radius: 15px; 
-            border-left: 5px solid #f1c40f;
-            margin: 20px 0; 
-        }
+        .script-box-th { border-left: 6px solid #27ae60; background: #f4faf6; padding: 20px; border-radius: 12px; margin-top: 15px; }
+        .script-box-en { border-left: 6px solid #2980b9; background: #f0f7ff; padding: 20px; border-radius: 12px; margin-top: 10px; font-style: italic; }
 
-        .script-th { border-left: 5px solid #27ae60; background: #f4faf6; padding: 18px; margin-top: 15px; border-radius: 8px; }
-        .script-en { border-left: 5px solid #2980b9; background: #f0f7ff; padding: 18px; margin-top: 12px; border-radius: 8px; font-style: italic; }
-        
-        .label { 
-            font-weight: 700; 
-            color: var(--primary-color); 
-            font-size: 0.9rem; 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px; 
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .preserve-breaks { 
-            white-space: pre-wrap; 
-            line-height: 1.8; 
-            font-size: 1.05rem;
-        }
-
-        /* หัวข้อที่เราทำหนา/ใหญ่ */
-        .highlight-header {
-            font-weight: 700;
-            font-size: 1.15rem;
-            color: #1a2a6c;
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding-bottom: 4px;
-        }
-
-        #status-bar { font-size: 0.85rem; text-align: center; margin-top: 15px; font-weight: 500; }
-        
-        /* สัญลักษณ์โหลดข้อมูล */
-        .loading-shimmer {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        #status-bar { font-size: 0.8rem; text-align: center; margin-top: 15px; color: #999; }
     </style>
 </head>
 <body>
 
 <div class="nav-header">
-    <div class="animate__animated animate__fadeInDown">
-        <h2 class="fw-bold mb-2">ระบบสืบค้น เกณฑ์การรับบริจาคโลหิต</h2>
-        <h4 class="fw-light opacity-75"ห้องบริจาคโลหิต โรงพยาบาลรามาธิบดีจักรีนฤบดินทร์</h4>
+    <div class="animate__animated animate__fadeIn">
+        <h3 class="fw-bold m-0">เกณฑ์การรับ ผู้บริจาคโลหิต</h3>
+        <p class="opacity-75 small">ห้องรับบริจาคโลหิต รามาธิบดีจักรีนฤบดินทร์</p>
     </div>
 </div>
 
 <div class="container pb-5">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
-            <div class="search-container animate__animated animate__fadeInUp">
-                <label class="fw-bold mb-3 text-secondary">ค้นหาโรค ยา หรืออาการเบื้องต้น</label>
-                <div class="input-group mb-3">
-                    <input type="text" id="searchInput" class="form-control search-input" placeholder="เช่น ความดัน, ยาแก้แพ้, นอนน้อย...">
-                </div>
-                <div class="d-flex gap-2">
-                    <button id="searchBtn" class="btn-search">
-                        <i class="bi bi-search me-2"></i> ค้นหาข้อมูลด่วน
-                    </button>
-                    <button id="clearBtn" class="btn-clear" title="ล้างการค้นหา">
-                        <i class="bi bi-arrow-counterclockwise fs-4"></i>
-                    </button>
-                </div>
-                <div id="status-bar" class="text-muted">
-                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>กำลังเชื่อมต่อฐานข้อมูล...
-                </div>
-            </div>
             
-            <div id="results" class="mt-5">
-                <div class="text-center p-5 animate__animated animate__fadeIn" id="welcome-msg">
-                    <div class="mb-4">
-                        <i class="bi bi-shield-check text-primary" style="font-size: 4rem; opacity: 0.2;"></i>
-                    </div>
-                    <h5 class="text-secondary fw-light">พร้อมสืบค้นเกณฑ์การรับบริจาคโลหิต</h5>
-                    <p class="small text-muted">ระบุคำค้นหาเพื่อตรวจสอบเกณฑ์เบื้องต้น</p>
+            <div id="search-section" class="search-container animate__animated animate__fadeInUp">
+                <label class="fw-bold mb-2 text-muted small">ระบุคำค้นหา (เช่น ชื่อโรค, ยา, อาการ)</label>
+                <div class="d-flex gap-2">
+                    <input type="text" id="searchInput" class="form-control search-input" placeholder="พิมพ์คำที่ต้องการค้นหา...">
+                    <button id="searchBtn" class="btn-search"><i class="bi bi-search"></i></button>
+                    <button id="clearBtn" class="btn-clear"><i class="bi bi-arrow-clockwise fs-5"></i></button>
                 </div>
+                <div id="status-bar">กำลังโหลดฐานข้อมูล...</div>
             </div>
+
+            <div id="list-area" class="mt-4">
+                </div>
+
+            <div id="detail-area" class="detail-view mt-4 animate__animated animate__fadeIn">
+                </div>
+
         </div>
     </div>
 </div>
 
 <script>
     let rawData = [];
+    let currentResults = []; // เก็บผลลัพธ์ที่เสิชได้
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxfT7UBjj3x6ywVOnIs2BnfRBTiAWMnHX4djVNWdioDv_KwVjCHtqXR62f2zsifK4-I/exec'; 
 
     window.onload = () => {
-        fetch(GAS_URL)
-            .then(res => res.json())
-            .then(data => { 
-                rawData = data; 
-                document.getElementById('status-bar').innerHTML = `<i class="bi bi-check-circle-fill text-success"></i> ระบบพร้อมทำงาน: พบข้อมูล ${data.length} รายการ`;
-            })
-            .catch(err => {
-                document.getElementById('status-bar').innerHTML = `<i class="bi bi-exclamation-circle-fill text-danger"></i> เชื่อมต่อล้มเหลว กรุณารีเฟรชหน้าจอ`;
-            });
+        fetch(GAS_URL).then(res => res.json()).then(data => { 
+            rawData = data; 
+            document.getElementById('status-bar').innerHTML = `<i class="bi bi-check-circle text-success"></i> พร้อมสืบค้น ${data.length} รายการ`;
+        });
     };
 
-    function autoFormat(text) {
+    // ฟังก์ชันทำตัวหนาและใหญ่สำหรับหัวข้อ 1. 2. 3.
+    function formatContent(text) {
         if (!text || text === "-") return text;
-        // ปรับหัวข้อ 1. 2. 3. ให้ใหญ่และหนา
+        // ปรับหัวข้อที่มีเลขตามด้วย : ให้ใหญ่และหนา
         return text.replace(/(\d+\.[^:\n\r]+[:：])/g, '<span class="highlight-header">$1</span>');
     }
 
-    function performSearch() {
+    function doSearch() {
         const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
-        const container = document.getElementById('results');
+        if (!keyword) return;
 
-        if (!keyword) {
-            container.innerHTML = '<div class="text-center p-5 text-muted animate__animated animate__shakeX">กรุณาระบุคำค้นหา</div>';
-            return;
-        }
-
-        const filtered = rawData.filter(item => JSON.stringify(item).toLowerCase().includes(keyword));
-        render(filtered);
+        currentResults = rawData.filter(item => JSON.stringify(item).toLowerCase().includes(keyword));
+        showListView();
     }
 
-    function render(data) {
-        const container = document.getElementById('results');
-        if (data.length === 0) {
-            container.innerHTML = `
-                <div class="text-center p-5 animate__animated animate__fadeIn">
-                    <i class="bi bi-clipboard-x text-muted" style="font-size: 3rem;"></i>
-                    <p class="mt-3 text-secondary">ไม่พบข้อมูลที่ตรงกับ "${document.getElementById('searchInput').value}"</p>
-                </div>`;
+    // --- แสดงแบบรายการ (List View) ---
+    function showListView() {
+        const listArea = document.getElementById('list-area');
+        const detailArea = document.getElementById('detail-area');
+        const searchSection = document.getElementById('search-section');
+
+        searchSection.style.display = 'block'; // โชว์ช่องค้นหา
+        detailArea.style.display = 'none';    // ซ่อนหน้าละเอียด
+        listArea.style.display = 'block';     // โชว์หน้ารายการ
+
+        if (currentResults.length === 0) {
+            listArea.innerHTML = '<div class="text-center p-5 text-muted">ไม่พบข้อมูล</div>';
             return;
         }
 
-        container.innerHTML = data.map((item, index) => {
-            const v = Object.values(item); 
-            // เพิ่ม delay การแสดงผลทีละใบ (Animation Delay)
-            const delay = index * 0.1;
-            return `
-            <div class="card result-card animate__animated animate__fadeInUp" style="animation-delay: ${delay}s">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <span class="badge-cat">${v[0] || 'CRITERIA'}</span>
-                        <i class="bi bi-info-circle text-muted"></i>
+        listArea.innerHTML = `
+            <p class="text-muted small mb-3">พบผลลัพธ์ ${currentResults.length} รายการ:</p>
+            ${currentResults.map((item, index) => {
+                const v = Object.values(item);
+                return `
+                <div class="list-item-card animate__animated animate__fadeInUp" style="animation-delay: ${index * 0.05}s" onclick="showDetailView(${index})">
+                    <div>
+                        <span class="list-badge mb-1 d-inline-block">${v[0] || 'ข้อมูล'}</span>
+                        <h5>${v[1]}</h5>
                     </div>
-                    <h3 class="fw-bold mb-4" style="color: var(--primary-color)">${v[1] || ''}</h3>
+                    <i class="bi bi-chevron-right text-muted"></i>
+                </div>`;
+            }).join('')}`;
+    }
+
+    // --- แสดงแบบละเอียด (Detail View) ---
+    function showDetailView(index) {
+        const item = currentResults[index];
+        const v = Object.values(item);
+        const listArea = document.getElementById('list-area');
+        const detailArea = document.getElementById('detail-area');
+        const searchSection = document.getElementById('search-section');
+
+        searchSection.style.display = 'none'; // ซ่อนช่องค้นหาเพื่อความโปร
+        listArea.style.display = 'none';      // ซ่อนรายการ
+        detailArea.style.display = 'block';    // โชว์หน้าละเอียด
+
+        detailArea.innerHTML = `
+            <button class="btn-back" onclick="showListView()">
+                <i class="bi bi-arrow-left me-2"></i> ย่อกลับไปดูรายการอื่น
+            </button>
+            
+            <div class="full-card card p-4 animate__animated animate__zoomIn">
+                <span class="list-badge mb-2" style="width:fit-content">${v[0] || 'CRITERIA'}</span>
+                <h2 class="fw-bold mb-4" style="color: var(--primary-navy)">${v[1]}</h2>
+                
+                <div class="criteria-box">
+                    <div class="text-primary fw-bold small mb-2"><i class="bi bi-info-circle-fill me-1"></i> เกณฑ์การคัดกรอง</div>
+                    <div class="preserve-breaks">${formatContent(v[3])}</div>
                     
-                    <div class="criteria-section">
-                        <span class="label"><i class="bi bi-clipboard2-check"></i> เกณฑ์การคัดกรอง</span>
-                        <div class="preserve-breaks">${autoFormat(v[3])}</div>
-                        
-                        <div class="mt-4 pt-3 border-top">
-                            <span class="label"><i class="bi bi-clock-history"></i> ระยะเวลางดบริจาค</span>
-                            <div class="text-danger fw-bold fs-5">${autoFormat(v[4])}</div>
-                        </div>
-                    </div>
-
-                    <div class="script-th">
-                        <span class="label text-success"><i class="bi bi-mic"></i> บทพูดเจ้าหน้าที่ (ไทย)</span>
-                        <div class="preserve-breaks small">${v[5] && v[5] !== "-" ? autoFormat(v[5]) : 'ไม่มีข้อมูลบทพูด'}</div>
-                    </div>
-
-                    <div class="script-en">
-                        <span class="label text-primary"><i class="bi bi-translate"></i> English Script</span>
-                        <div class="preserve-breaks small">${v[6] && v[6] !== "-" ? v[6] : 'No script available'}</div>
+                    <div class="mt-4 pt-3 border-top">
+                        <div class="text-danger fw-bold small mb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i> ระยะเวลางดบริจาค</div>
+                        <div class="text-danger fw-bold fs-4">${formatContent(v[4])}</div>
                     </div>
                 </div>
+
+                <div class="script-box-th">
+                    <div class="text-success fw-bold small mb-2"><i class="bi bi-mic-fill me-1"></i> บทพูดเจ้าหน้าที่ (TH)</div>
+                    <div class="preserve-breaks small text-muted">${v[5] && v[5] !== "-" ? formatContent(v[5]) : 'ไม่มีข้อมูล'}</div>
+                </div>
+
+                <div class="script-box-en">
+                    <div class="text-primary fw-bold small mb-2"><i class="bi bi-translate me-1"></i> English Script</div>
+                    <div class="preserve-breaks small text-muted">${v[6] && v[6] !== "-" ? v[6] : 'No script available'}</div>
+                </div>
             </div>`;
-        }).join('');
+        window.scrollTo(0,0);
     }
 
-    document.getElementById('searchBtn').onclick = performSearch;
-    document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') performSearch(); };
+    document.getElementById('searchBtn').onclick = doSearch;
+    document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') doSearch(); };
     document.getElementById('clearBtn').onclick = () => {
         document.getElementById('searchInput').value = '';
-        document.getElementById('results').innerHTML = '<div class="text-center p-5 text-muted"><i class="bi bi-search" style="font-size: 3rem; opacity: 0.2;"></i><p class="mt-3">กรุณาระบุคำค้นหาเพื่อแสดงข้อมูล</p></div>';
-        document.getElementById('searchInput').focus();
+        document.getElementById('list-area').innerHTML = '';
+        showListView();
     };
 </script>
 </body>
