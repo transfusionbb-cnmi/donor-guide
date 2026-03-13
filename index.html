@@ -12,16 +12,38 @@
         .nav-header { background: #1e3799; color: white; padding: 40px 20px 60px; text-align: center; }
         .search-container { background: white; padding: 30px; border-radius: 20px; margin-top: -30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .search-input { border-radius: 10px; padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem; }
+        
+        /* ปุ่มค้นหา */
         .btn-search { background-color: #d32f2f; color: white; border-radius: 10px; padding: 12px; font-weight: 600; border: none; flex-grow: 1; }
         .btn-search:hover { background-color: #b71c1c; color: white; }
         .btn-clear { background-color: white; color: #1e3799; border: 2px solid #1e3799; border-radius: 10px; width: 55px; display: flex; align-items: center; justify-content: center; }
+        
+        /* การ์ดผลลัพธ์ */
         .result-card { border: none; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); background: white; overflow: hidden; }
         .badge-cat { background: #1e3799; color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 10px; display: inline-block; }
         .criteria-section { background: #fffcf0; padding: 15px; border-radius: 10px; border: 1px dashed #f1c40f; margin: 15px 0; }
         .script-th { border-left: 5px solid #27ae60; background: #f4faf6; padding: 15px; margin-top: 15px; border-radius: 0 10px 10px 0; }
-        .script-en { border-left: 5px solid #2980b9; background: #f0f7ff; padding: 15px; margin-top: 10px; border-radius: 0 10px 10px 0;font-style: italic; }
-        .label { font-weight: 600; color: #1e3799; font-size: 0.95rem; margin-bottom: 5px; display: block;}
-        .preserve-breaks { white-space: pre-wrap; word-wrap: break-word; }
+        .script-en { border-left: 5px solid #2980b9; background: #f0f7ff; padding: 15px; margin-top: 10px; border-radius: 0 10px 10px 0; font-style: italic; }
+        .label { font-weight: 600; color: #1e3799; font-size: 0.95rem; margin-bottom: 5px; display: block; }
+        
+        /* แก้ไขการแสดงผลข้อความ */
+        .preserve-breaks { 
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            line-height: 1.7; 
+            display: block;
+        }
+
+        /* สไตล์สำหรับหัวข้อที่เป็นเลข (เช่น 1.หัวข้อ:) ให้หนาและใหญ่ขึ้น */
+        .highlight-header {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #1e3799;
+            display: inline-block;
+            margin-top: 10px;
+            margin-bottom: 2px;
+        }
+
         #status-bar { font-size: 0.8rem; text-align: center; margin-top: 10px; color: #7f8c8d; }
     </style>
 </head>
@@ -37,7 +59,7 @@
         <div class="col-md-8">
             <div class="search-container">
                 <label class="fw-bold mb-2">ระบุคำที่ต้องการสืบค้น</label>
-                <input type="text" id="searchInput" class="form-control search-input mb-3" placeholder="พิมพ์คำค้นหา เช่น จิตเวช, ความดัน, ยา">
+                <input type="text" id="searchInput" class="form-control search-input mb-3" placeholder="พิมพ์คำค้นหา เช่น ความดัน, ยา, ...">
                 <div class="d-flex gap-2">
                     <button id="searchBtn" class="btn-search"><i class="bi bi-search me-2"></i> ค้นหาข้อมูล</button>
                     <button id="clearBtn" class="btn-clear"><i class="bi bi-arrow-clockwise fs-4"></i></button>
@@ -67,10 +89,17 @@
                 document.getElementById('status-bar').innerHTML = `<i class="bi bi-check-circle-fill text-success"></i> เชื่อมต่อสำเร็จ: พบข้อมูล ${data.length} รายการ`;
             })
             .catch(err => {
-                document.getElementById('status-bar').innerHTML = `<i class="bi bi-exclamation-triangle-fill text-danger"></i> ไม่สามารถโหลดข้อมูลได้ กรุณาตรวจสอบการ Deploy`;
+                document.getElementById('status-bar').innerHTML = `<i class="bi bi-exclamation-triangle-fill text-danger"></i> ไม่สามารถโหลดข้อมูลได้`;
                 console.error("Error:", err);
             });
     };
+
+    // ฟังก์ชันพิเศษ: ช่วยทำให้ 1.ข้อความ: เป็นตัวหนาและใหญ่ขึ้น
+    function autoFormat(text) {
+        if (!text || text === "-") return text;
+        // ค้นหา รูปแบบ "ตัวเลข.ข้อความอะไรก็ได้ที่ไม่มีขึ้นบรรทัดใหม่ตามด้วย :" 
+        return text.replace(/(\d+\.[^:\n\r]+[:：])/g, '<span class="highlight-header">$1</span>');
+    }
 
     function performSearch() {
         const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -81,7 +110,6 @@
             return;
         }
 
-        // ค้นหาแบบละเอียดจากทุกคอลัมน์
         const filtered = rawData.filter(item => {
             return JSON.stringify(item).toLowerCase().includes(keyword);
         });
@@ -96,25 +124,25 @@
             return;
         }
 
-container.innerHTML = data.map(item => {
+        container.innerHTML = data.map(item => {
             const v = Object.values(item); 
             return `
-            <div class="card result-card">
+            <div class="card result-card shadow-sm">
                 <div class="card-body">
                     <span class="badge-cat">${v[0] || 'ข้อมูลทั่วไป'}</span>
                     <h4 class="text-primary fw-bold mb-3">${v[1] || ''}</h4>
                     
                     <div class="criteria-section">
                         <span class="label">📍 เกณฑ์การคัดกรอง</span>
-                        <div class="text-dark mb-2 preserve-breaks">${v[3] || '-'}</div>
+                        <div class="text-dark mb-2 preserve-breaks">${autoFormat(v[3])}</div>
                         
                         <span class="label">⏳ ระยะเวลางดบริจาค</span>
-                        <div class="text-danger fw-bold preserve-breaks">${v[4] || 'ไม่มีกำหนดงด'}</div>
+                        <div class="text-danger fw-bold preserve-breaks">${autoFormat(v[4])}</div>
                     </div>
 
                     <div class="script-th">
                         <span class="label text-success">🇹🇭 TH SCRIPT สำหรับเจ้าหน้าที่</span>
-                        <div class="small preserve-breaks">${v[5] && v[5] !== "-" ? v[5] : 'ไม่มีข้อมูลบทพูด'}</div>
+                        <div class="small preserve-breaks">${v[5] && v[5] !== "-" ? autoFormat(v[5]) : 'ไม่มีข้อมูลบทพูด'}</div>
                     </div>
 
                     <div class="script-en">
