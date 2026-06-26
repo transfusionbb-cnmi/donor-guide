@@ -535,7 +535,7 @@
   <script>
     'use strict';
 
-    const APP_VERSION = '1.2.0';
+    const APP_VERSION = '1.2.1';
     const DATA_URL = './data.json';
 
     const MAJOR_GROUPS = [
@@ -629,7 +629,7 @@
 
         records = buildRecords(data);
         databaseStatus.className = 'database-status';
-        databaseStatus.innerHTML = `<span class="status-dot"></span><span>${records.length} รายการ · GitHub</span>`;
+        databaseStatus.innerHTML = `<span class="status-dot"></span><span>${records.length} รายการ</span>`;
         renderCategories();
       } catch (error) {
         console.error(error);
