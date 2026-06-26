@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#174a7e">
+  <meta name="theme-color" content="#174f86">
   <meta name="description" content="คู่มือค้นหาเกณฑ์คัดกรองผู้บริจาคโลหิต โรงพยาบาลรามาธิบดีจักรีนฤบดินทร์">
   <title>คู่มือคัดกรองผู้บริจาคโลหิต | CNMI</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -12,18 +12,18 @@
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
   <style>
     :root {
-      --navy: #174a7e;
-      --navy-deep: #10365d;
-      --blue: #2f72b7;
-      --red: #d9363e;
-      --green: #16825d;
-      --gold: #e7a71a;
-      --bg: #f4f7fb;
+      --navy: #174f86;
+      --navy-deep: #123b67;
+      --blue: #3379ba;
+      --red: #d83340;
+      --red-soft: #fff1f2;
+      --green: #13825a;
+      --bg: #f2f6fb;
       --card: #ffffff;
-      --text: #25313d;
-      --muted: #6c7a89;
-      --line: #e4eaf1;
-      --shadow: 0 14px 35px rgba(27, 61, 95, .12);
+      --text: #263443;
+      --muted: #718093;
+      --line: #dfe7f0;
+      --shadow: 0 12px 30px rgba(25, 63, 101, .11);
       --radius: 22px;
     }
 
@@ -32,10 +32,11 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Sarabun", "Noto Sans Thai", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       background: var(--bg);
+      font-family: "Sarabun", "Noto Sans Thai", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     button, input { font: inherit; }
     button { cursor: pointer; }
@@ -44,10 +45,10 @@
     .hero {
       position: relative;
       overflow: hidden;
+      min-height: 206px;
       color: #fff;
       background: linear-gradient(135deg, var(--navy-deep), var(--blue));
-      padding: max(26px, env(safe-area-inset-top)) 18px 80px;
-      text-align: center;
+      padding: max(26px, env(safe-area-inset-top)) 20px 72px;
     }
     .hero::before,
     .hero::after {
@@ -56,269 +57,444 @@
       border-radius: 50%;
       background: rgba(255,255,255,.08);
     }
-    .hero::before { width: 180px; height: 180px; right: -55px; top: -80px; }
-    .hero::after { width: 120px; height: 120px; left: -45px; bottom: -45px; }
+    .hero::before { width: 210px; height: 210px; right: -62px; top: -94px; }
+    .hero::after { width: 140px; height: 140px; left: -54px; bottom: -58px; }
     .brand {
       position: relative;
       z-index: 1;
-      display: inline-flex;
+      width: min(900px, 100%);
+      margin: 0 auto;
+      display: flex;
       align-items: center;
-      gap: 13px;
-      text-align: left;
+      gap: 14px;
     }
     .brand-logo {
-      width: 58px;
-      height: 58px;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,.2);
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      box-shadow: 0 9px 22px rgba(0,0,0,.2);
       flex: 0 0 auto;
     }
-    .brand h1 { margin: 0; font-size: clamp(1.28rem, 4vw, 1.72rem); line-height: 1.25; }
-    .brand p { margin: 5px 0 0; opacity: .84; font-size: .9rem; }
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.28rem, 4.3vw, 1.8rem);
+      line-height: 1.24;
+      letter-spacing: -.01em;
+    }
+    .brand p {
+      margin: 5px 0 0;
+      opacity: .86;
+      font-size: clamp(.78rem, 3.2vw, .95rem);
+      line-height: 1.35;
+    }
 
     .shell {
-      width: min(930px, calc(100% - 28px));
-      margin: -48px auto 0;
-      padding-bottom: 54px;
       position: relative;
       z-index: 2;
+      width: min(900px, calc(100% - 24px));
+      margin: -52px auto 0;
+      padding-bottom: calc(28px + env(safe-area-inset-bottom));
     }
-    .search-card,
+    .search-panel,
+    .category-panel,
     .detail-card,
-    .empty-card {
+    .empty-state {
       background: var(--card);
-      border: 1px solid rgba(228,234,241,.9);
+      border: 1px solid rgba(223,231,240,.95);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
-    .search-card { padding: 22px; }
-    .search-head {
+
+    .search-panel { padding: 16px; }
+    .search-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
+      gap: 10px;
     }
-    .search-label { font-weight: 800; color: var(--navy); }
-    .sync-button {
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: #fff;
-      color: var(--navy);
-      display: grid;
-      place-items: center;
-    }
-    .sync-button:hover { background: #f4f8fc; }
-    .sync-button.spinning svg { animation: spin .8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .search-wrap { position: relative; }
+    .search-wrap { position: relative; flex: 1 1 auto; min-width: 0; }
     .search-icon {
       position: absolute;
       left: 15px;
       top: 50%;
       transform: translateY(-50%);
-      width: 22px;
-      height: 22px;
-      color: #8190a1;
+      width: 23px;
+      height: 23px;
+      color: #7d8ea1;
       pointer-events: none;
     }
     .search-input {
       width: 100%;
       min-height: 56px;
       border: 2px solid var(--line);
-      border-radius: 15px;
+      border-radius: 16px;
       padding: 13px 46px 13px 48px;
       outline: none;
       color: var(--text);
       background: #fbfcfe;
-      transition: border-color .18s, box-shadow .18s;
+      transition: border-color .18s, box-shadow .18s, background .18s;
     }
     .search-input:focus {
-      border-color: #7eafe0;
-      box-shadow: 0 0 0 4px rgba(47,114,183,.12);
+      border-color: #82b4e3;
       background: #fff;
+      box-shadow: 0 0 0 4px rgba(51,121,186,.12);
     }
-    .clear-inline {
+    .clear-search {
       position: absolute;
-      right: 11px;
+      right: 10px;
       top: 50%;
       transform: translateY(-50%);
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border: 0;
-      border-radius: 10px;
-      background: transparent;
-      color: #7d8895;
+      border-radius: 11px;
+      color: #647589;
+      background: #edf3f8;
       display: grid;
       place-items: center;
     }
-    .clear-inline:hover { background: #eef3f8; }
-
-    .action-row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-top: 12px; }
-    .primary-btn,
-    .secondary-btn,
-    .back-btn {
-      border-radius: 14px;
-      min-height: 48px;
-      border: 0;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .primary-btn { color: #fff; background: linear-gradient(135deg, #df4149, #bf2630); box-shadow: 0 8px 18px rgba(217,54,62,.2); }
-    .secondary-btn { background: #fff; color: var(--navy); border: 2px solid var(--navy); }
-    .primary-btn:hover { filter: brightness(.98); transform: translateY(-1px); }
-    .secondary-btn:hover { background: #f3f8fc; }
-
-    .status {
-      margin-top: 12px;
-      min-height: 22px;
-      color: var(--muted);
-      font-size: .82rem;
-      text-align: center;
-    }
-    .status.ok { color: var(--green); }
-    .status.warn { color: #9a6800; }
-    .status.error { color: #b42730; }
-
-    .category-bar {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 14px 1px 2px;
-      scrollbar-width: none;
-    }
-    .category-bar::-webkit-scrollbar { display: none; }
-    .category-chip {
-      white-space: nowrap;
+    .home-button {
+      width: 56px;
+      height: 56px;
+      flex: 0 0 auto;
       border: 1px solid var(--line);
-      background: #fff;
+      border-radius: 16px;
       color: var(--navy);
-      padding: 8px 13px;
-      border-radius: 999px;
-      font-size: .82rem;
+      background: #fff;
+      display: grid;
+      place-items: center;
+    }
+    .home-button:active,
+    .clear-search:active { transform: translateY(-50%) scale(.97); }
+    .home-button:active { transform: scale(.97); }
+    .database-status {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      min-height: 22px;
+      margin-top: 9px;
+      color: var(--green);
+      font-size: .78rem;
       font-weight: 700;
     }
-    .category-chip.active { color: #fff; background: var(--navy); border-color: var(--navy); }
-
-    .content { margin-top: 18px; }
-    .result-count { margin: 0 3px 11px; color: var(--muted); font-size: .87rem; }
-    .result-list { display: grid; gap: 11px; }
-    .result-item {
-      width: 100%;
-      text-align: left;
-      border: 1px solid var(--line);
-      background: #fff;
-      border-radius: 17px;
-      padding: 17px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 12px;
-      box-shadow: 0 5px 16px rgba(31,61,91,.06);
-      transition: transform .16s, border-color .16s, box-shadow .16s;
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
     }
-    .result-item:hover { transform: translateY(-2px); border-color: #9fc4e7; box-shadow: 0 10px 22px rgba(31,61,91,.1); }
-    .badge {
-      display: inline-flex;
-      width: fit-content;
+    .database-status.error { color: #b42b35; }
+
+    .content { margin-top: 14px; }
+    .category-panel { padding: 18px; }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 13px;
+    }
+    .panel-title {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+    .total-count {
+      flex: 0 0 auto;
+      color: var(--muted);
+      background: #eef4f9;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 800;
+    }
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .category-card {
+      min-width: 0;
+      min-height: 82px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #fff;
+      color: var(--text);
+      text-align: left;
+      padding: 13px;
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(28,61,94,.045);
+      transition: transform .15s, border-color .15s, box-shadow .15s;
+    }
+    .category-card:first-child {
+      grid-column: 1 / -1;
+      min-height: 68px;
+      background: linear-gradient(135deg, #174f86, #2f72b7);
+      color: #fff;
+      border-color: transparent;
+    }
+    .category-card:hover {
+      transform: translateY(-2px);
+      border-color: #9fc4e7;
+      box-shadow: 0 9px 20px rgba(28,61,94,.09);
+    }
+    .category-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
       background: #eaf3fb;
       color: var(--navy);
-      padding: 5px 10px;
-      border-radius: 999px;
-      font-size: .72rem;
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
       font-weight: 800;
-      margin-bottom: 7px;
     }
-    .result-title { margin: 0; font-size: 1.03rem; line-height: 1.45; color: #25313d; }
-    .chevron { width: 22px; height: 22px; color: #8b98a7; }
+    .category-card:first-child .category-icon {
+      color: #fff;
+      background: rgba(255,255,255,.16);
+    }
+    .category-text { min-width: 0; }
+    .category-name {
+      display: block;
+      font-size: .91rem;
+      font-weight: 800;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+    .category-count {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .74rem;
+      font-weight: 700;
+    }
+    .category-card:first-child .category-count { color: rgba(255,255,255,.78); }
 
-    .empty-card { padding: 48px 20px; text-align: center; color: var(--muted); box-shadow: none; }
-    .empty-icon { width: 56px; height: 56px; color: #b5c0cc; margin-bottom: 8px; }
-    .empty-card p { margin: 7px 0 0; }
-
-    .back-btn {
-      min-height: 44px;
-      padding: 0 16px;
-      margin-bottom: 12px;
-      background: #fff;
-      color: #4b5968;
-      border: 1px solid var(--line);
-    }
-    .detail-card { padding: clamp(19px, 4vw, 30px); }
-    .detail-title { margin: 5px 0 20px; color: var(--navy); font-size: clamp(1.4rem, 4vw, 2rem); line-height: 1.35; }
-    .info-box,
-    .script-box {
-      border-radius: 17px;
-      padding: 19px;
-      margin-top: 13px;
-    }
-    .info-box { background: #fffbec; border-left: 6px solid var(--gold); }
-    .script-th { background: #f0faf6; border-left: 6px solid #26a16f; }
-    .script-en { background: #f0f7ff; border-left: 6px solid #3788cf; }
-    .section-label {
+    .filter-bar {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 2px 10px;
+    }
+    .active-filter {
+      min-width: 0;
+      color: var(--navy);
+      font-size: .9rem;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+    .result-count {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .result-list { display: grid; gap: 10px; }
+    .result-item {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      color: var(--text);
+      text-align: left;
+      padding: 15px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 24px;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 5px 15px rgba(28,61,94,.06);
+      transition: transform .15s, border-color .15s, box-shadow .15s;
+    }
+    .result-item:hover {
+      transform: translateY(-2px);
+      border-color: #9fc4e7;
+      box-shadow: 0 9px 21px rgba(28,61,94,.1);
+    }
+    .result-title {
+      margin: 0;
+      color: #273747;
+      font-size: 1rem;
+      line-height: 1.48;
+      overflow-wrap: anywhere;
+    }
+    .result-group {
+      display: inline-flex;
+      width: fit-content;
+      max-width: 100%;
+      margin-bottom: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      color: var(--navy);
+      background: #eaf3fb;
+      font-size: .69rem;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+    .chevron { width: 22px; height: 22px; color: #8d9baa; }
+
+    .empty-state {
+      min-height: 170px;
+      padding: 32px 20px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      text-align: center;
+      box-shadow: none;
+      font-weight: 800;
+    }
+
+    .detail-toolbar {
+      position: sticky;
+      top: max(8px, env(safe-area-inset-top));
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .back-button {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--navy);
+      background: rgba(255,255,255,.96);
+      padding: 0 14px;
+      display: inline-flex;
       align-items: center;
       gap: 7px;
       font-weight: 800;
-      margin-bottom: 9px;
-      color: var(--navy);
-      font-size: .88rem;
+      box-shadow: 0 6px 15px rgba(28,61,94,.08);
+      backdrop-filter: blur(10px);
     }
-    .section-label.red { color: #b92e37; }
-    .section-label.green { color: #167752; }
-    .section-label.blue { color: #286fae; }
-    .preserve { white-space: pre-wrap; line-height: 1.8; overflow-wrap: anywhere; }
+    .detail-card { padding: clamp(18px, 4vw, 28px); }
+    .detail-group {
+      display: inline-flex;
+      width: fit-content;
+      max-width: 100%;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: var(--navy);
+      background: #eaf3fb;
+      font-size: .73rem;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+    .detail-title {
+      margin: 10px 0 18px;
+      color: var(--navy);
+      font-size: clamp(1.32rem, 5vw, 1.9rem);
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+    .deferral-card,
+    .criteria-card {
+      border-radius: 18px;
+      padding: 17px;
+    }
+    .deferral-card {
+      margin-bottom: 12px;
+      color: #ae2630;
+      background: var(--red-soft);
+      border: 1px solid #ffd2d6;
+    }
+    .criteria-card {
+      color: var(--text);
+      background: #f8fafc;
+      border: 1px solid var(--line);
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 10px;
+      color: inherit;
+      font-size: .92rem;
+      font-weight: 900;
+    }
+    .preserve {
+      white-space: pre-wrap;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
     .subhead {
       display: block;
-      margin: 14px 0 5px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid rgba(23,74,126,.12);
+      margin: 13px 0 4px;
       color: var(--navy);
-      font-weight: 800;
+      font-weight: 900;
     }
-    .deferral {
-      margin-top: 17px;
-      padding-top: 15px;
-      border-top: 1px solid rgba(185,46,55,.15);
-      color: #b92e37;
-      font-size: 1.12rem;
+    .deferral-text {
+      font-size: 1.06rem;
       font-weight: 800;
-      line-height: 1.55;
+      line-height: 1.65;
     }
 
-    .skeleton { display: grid; gap: 11px; }
-    .skeleton-row { height: 84px; border-radius: 17px; background: linear-gradient(90deg, #edf1f5 25%, #f7f9fb 37%, #edf1f5 63%); background-size: 400% 100%; animation: shimmer 1.2s infinite; }
+    .skeleton { display: grid; gap: 10px; }
+    .skeleton-row {
+      height: 84px;
+      border-radius: 18px;
+      background: linear-gradient(90deg, #e9eef4 25%, #f7f9fb 37%, #e9eef4 63%);
+      background-size: 400% 100%;
+      animation: shimmer 1.15s infinite;
+    }
     @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
 
-    .footer-note { text-align: center; color: #8794a1; font-size: .75rem; margin-top: 22px; }
-    .offline-pill { display: none; position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 10; color: #fff; background: #25313d; padding: 8px 13px; border-radius: 999px; font-size: .78rem; box-shadow: 0 8px 18px rgba(0,0,0,.18); }
+    .offline-pill {
+      display: none;
+      position: fixed;
+      left: 50%;
+      bottom: calc(14px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      z-index: 20;
+      color: #fff;
+      background: #263443;
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-size: .76rem;
+      box-shadow: 0 8px 18px rgba(0,0,0,.18);
+    }
     body.offline .offline-pill { display: block; }
 
-    @media (max-width: 560px) {
-      .hero { padding-bottom: 70px; }
-      .shell { width: min(100% - 18px, 930px); margin-top: -43px; }
-      .search-card { padding: 16px; border-radius: 19px; }
-      .action-row { grid-template-columns: 1fr; }
-      .secondary-btn { min-height: 44px; }
-      .detail-card { border-radius: 19px; }
-      .result-item { padding: 15px; }
+    @media (min-width: 720px) {
+      .category-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .category-card:first-child { grid-column: 1 / -1; }
+      .result-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-
+    @media (max-width: 430px) {
+      .hero { min-height: 194px; padding-inline: 15px; }
+      .brand-logo { width: 58px; height: 58px; border-radius: 16px; }
+      .shell { width: calc(100% - 18px); margin-top: -48px; }
+      .search-panel { padding: 13px; border-radius: 19px; }
+      .search-input { min-height: 53px; font-size: .95rem; }
+      .home-button { width: 53px; height: 53px; }
+      .category-panel { padding: 14px; border-radius: 19px; }
+      .category-grid { gap: 8px; }
+      .category-card { min-height: 78px; padding: 11px; gap: 8px; }
+      .category-icon { width: 34px; height: 34px; border-radius: 11px; font-size: 1.05rem; }
+      .category-name { font-size: .84rem; }
+      .result-item { padding: 14px; border-radius: 16px; }
+      .detail-card { border-radius: 19px; }
+    }
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
     }
   </style>
 </head>
 <body>
   <header class="hero">
     <div class="brand">
-      <img class="brand-logo" src="./icons/icon-192.png" alt="ไอคอนคู่มือคัดกรองผู้บริจาคโลหิต" width="58" height="58">
+      <img class="brand-logo" src="./icons/icon-192.png" alt="ไอคอนคู่มือคัดกรองผู้บริจาคโลหิต" width="64" height="64">
       <div>
         <h1>คู่มือคัดกรองผู้บริจาคโลหิต</h1>
         <p>โรงพยาบาลรามาธิบดีจักรีนฤบดินทร์</p>
@@ -327,29 +503,22 @@
   </header>
 
   <main class="shell">
-    <section id="searchSection" class="search-card" aria-label="ค้นหาเกณฑ์คัดกรอง">
-      <div class="search-head">
-        <label class="search-label" for="searchInput">ค้นหาโรค ยา อาการ หรือหัตถการ</label>
-        <button id="syncBtn" class="sync-button" type="button" title="อัปเดตข้อมูลจาก Google Sheet" aria-label="อัปเดตข้อมูลจาก Google Sheet">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.7-4.3L3 9m1-5v5h5M4 13a8 8 0 0 0 14.7 4.3L21 15m-1 5v-5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <section id="searchPanel" class="search-panel" aria-label="ค้นหาเกณฑ์คัดกรอง">
+      <div class="search-row">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.8-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="searchInput" class="search-input" type="search" autocomplete="off" enterkeyhint="search" placeholder="ค้นหาโรค ยา อาการ หรือหัตถการ">
+          <button id="clearSearch" class="clear-search hidden" type="button" aria-label="ล้างคำค้นหา">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <button id="homeBtn" class="home-button" type="button" title="กลับหน้าหมวดหมู่" aria-label="กลับหน้าหมวดหมู่">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2v-9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
-      <div class="search-wrap">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.8-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input id="searchInput" class="search-input" type="search" autocomplete="off" placeholder="เช่น ความดัน, สัก, ยาปฏิชีวนะ, ตั้งครรภ์">
-        <button id="clearInline" class="clear-inline hidden" type="button" aria-label="ล้างคำค้นหา">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
+      <div id="databaseStatus" class="database-status" role="status" aria-live="polite">
+        <span class="status-dot"></span><span>กำลังเปิดข้อมูล…</span>
       </div>
-      <div class="action-row">
-        <button id="searchBtn" class="primary-btn" type="button">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.8-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          ค้นหาข้อมูล
-        </button>
-        <button id="clearBtn" class="secondary-btn" type="button">ล้างข้อมูล</button>
-      </div>
-      <div id="statusBar" class="status" role="status" aria-live="polite">กำลังเปิดฐานข้อมูลในเครื่อง…</div>
-      <div id="categoryBar" class="category-bar hidden" aria-label="เลือกหมวดหมู่"></div>
     </section>
 
     <section id="contentArea" class="content" aria-live="polite">
@@ -359,33 +528,42 @@
         <div class="skeleton-row"></div>
       </div>
     </section>
-
-    <p class="footer-note">ข้อมูลสำหรับช่วยปฏิบัติงานคัดกรอง ควรใช้ร่วมกับแนวทางของหน่วยงานและดุลยพินิจของผู้รับผิดชอบ</p>
   </main>
 
-  <div class="offline-pill">กำลังใช้งานแบบออฟไลน์</div>
+  <div class="offline-pill">ใช้งานแบบออฟไลน์</div>
 
   <script>
     'use strict';
 
-    const APP_VERSION = '1.1.0';
-    const LOCAL_DATA_URL = './data.json';
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxfT7UBjj3x6ywVOnIs2BnfRBTiAWMnHX4djVNWdioDv_KwVjCHtqXR62f2zsifK4-I/exec';
-    const STORAGE_KEY = 'cnmi_donor_criteria_cache_v2';
-    const STORAGE_TIME_KEY = 'cnmi_donor_criteria_cache_time_v2';
+    const APP_VERSION = '1.2.0';
+    const DATA_URL = './data.json';
 
-    let rawData = [];
-    let indexedData = [];
-    let currentFiltered = [];
-    let activeCategory = 'ทั้งหมด';
-    let currentQuery = '';
+    const MAJOR_GROUPS = [
+      { key: 'ทั้งหมด', label: 'ทั้งหมด', icon: '≡' },
+      { key: 'คุณสมบัติทั่วไป', label: 'คุณสมบัติทั่วไป', icon: '✓' },
+      { key: 'ร่างกายพื้นฐาน', label: 'ร่างกายพื้นฐาน', icon: '♡' },
+      { key: 'สุขภาพและโรคประจำตัว', label: 'สุขภาพและโรคประจำตัว', icon: '+' },
+      { key: 'ยาและอาหารเสริม', label: 'ยาและอาหารเสริม', icon: 'Rx' },
+      { key: 'วัคซีน', label: 'วัคซีน', icon: 'V' },
+      { key: 'โรคติดเชื้อ', label: 'โรคติดเชื้อ', icon: '!' },
+      { key: 'หัตถการและการผ่าตัด', label: 'หัตถการและการผ่าตัด', icon: '✦' },
+      { key: 'พฤติกรรมและความเสี่ยง', label: 'พฤติกรรมและความเสี่ยง', icon: '⚠' },
+      { key: 'สุขภาพสตรี', label: 'สุขภาพสตรี', icon: '♀' },
+      { key: 'การเดินทาง', label: 'การเดินทาง', icon: '◎' }
+    ];
+
+    let records = [];
+    let filteredRecords = [];
+    let activeGroup = 'ทั้งหมด';
+    let currentView = 'categories';
+    let detailReturnScroll = 0;
+    let searchTimer = null;
 
     const $ = (id) => document.getElementById(id);
     const searchInput = $('searchInput');
+    const clearSearch = $('clearSearch');
     const contentArea = $('contentArea');
-    const statusBar = $('statusBar');
-    const categoryBar = $('categoryBar');
-    const syncBtn = $('syncBtn');
+    const databaseStatus = $('databaseStatus');
 
     function escapeHtml(value) {
       return String(value ?? '')
@@ -400,6 +578,7 @@
       return String(value ?? '')
         .normalize('NFKC')
         .toLocaleLowerCase('th')
+        .replace(/[–—]/g, '-')
         .replace(/\s+/g, ' ')
         .trim();
     }
@@ -409,173 +588,140 @@
       return Object.values(item)[index] ?? '';
     }
 
-    function buildIndex(data) {
-      return data.map((item, sourceIndex) => ({
-        item,
-        sourceIndex,
-        category: String(getField(item, 'หมวดหมู่', 0) || 'ไม่ระบุหมวดหมู่'),
-        title: String(getField(item, 'หัวข้อ', 1) || 'ข้อมูลคัดกรอง'),
-        searchable: normalizeText(Object.values(item).join(' | '))
-      }));
+    function detectMajorGroup(category, item) {
+      const text = normalizeText(`${category} ${getField(item, 'หัวข้อ', 1)} ${getField(item, 'คำที่ใช้ค้นหา', 2)}`);
+
+      if (text.includes('ประวัติการเดินทาง') || text.includes('travel history') || text.includes('เดินทาง')) return 'การเดินทาง';
+      if (text.includes('สุขภาพสตรี') || text.includes('ตั้งครรภ์') || text.includes('ประจำเดือน') || text.includes('ฮอร์โมน')) return 'สุขภาพสตรี';
+      if (text.includes('วัคซีน') || text.includes('vaccin') || text.includes('immunization')) return 'วัคซีน';
+      if (text.includes('โรคติดเชื้อ') || text.includes('infectious') || text.includes('viral') || text.includes('ปรสิต') || text.includes('โปรโตซัว') || text.includes('tropical')) return 'โรคติดเชื้อ';
+      if (text.includes('หัตถการ') || text.includes('ผ่าตัด') || text.includes('ทันตกรรม') || text.includes('ความงาม') || text.includes('procedure') || text.includes('surgery') || text.includes('dentistry') || text.includes('diagnostic')) return 'หัตถการและการผ่าตัด';
+      if (text.includes('พฤติกรรม') || text.includes('สารเสพติด') || text.includes('สารควบคุม') || text.includes('อุบัติเหตุ') || text.includes('risk behavior') || text.includes('risk history')) return 'พฤติกรรมและความเสี่ยง';
+      if (text.includes('ยา') || text.includes('medication') || text.includes('สมุนไพร') || text.includes('อาหารเสริม') || text.includes('วิตามิน')) return 'ยาและอาหารเสริม';
+      if (text.includes('ร่างกายพื้นฐาน')) return 'ร่างกายพื้นฐาน';
+      if (text.includes('คุณสมบัติทั่วไป')) return 'คุณสมบัติทั่วไป';
+      return 'สุขภาพและโรคประจำตัว';
     }
 
-    function setData(data, sourceLabel) {
-      if (!Array.isArray(data)) throw new Error('รูปแบบข้อมูลไม่ถูกต้อง');
-      rawData = data.filter((item) => item && typeof item === 'object');
-      indexedData = buildIndex(rawData);
-      buildCategories();
-      statusBar.className = 'status ok';
-      statusBar.textContent = `พร้อมใช้งาน ${rawData.length} รายการ · ${sourceLabel}`;
-      renderWelcome();
+    function buildRecords(data) {
+      return data
+        .filter((item) => item && typeof item === 'object')
+        .map((item, index) => {
+          const sourceCategory = String(getField(item, 'หมวดหมู่', 0) || 'ไม่ระบุหมวดหมู่');
+          const title = String(getField(item, 'หัวข้อ', 1) || 'ข้อมูลคัดกรอง');
+          return {
+            id: index,
+            item,
+            sourceCategory,
+            title,
+            majorGroup: detectMajorGroup(sourceCategory, item),
+            searchable: normalizeText(Object.values(item).join(' | '))
+          };
+        });
     }
 
-    function buildCategories() {
-      const categories = ['ทั้งหมด', ...new Set(indexedData.map((x) => x.category))];
-      categoryBar.innerHTML = categories.map((category) => `
-        <button class="category-chip${category === activeCategory ? ' active' : ''}" type="button" data-category="${escapeHtml(category)}">${escapeHtml(category)}</button>
-      `).join('');
-      categoryBar.classList.remove('hidden');
-      categoryBar.querySelectorAll('.category-chip').forEach((button) => {
+    async function loadData() {
+      try {
+        const response = await fetch(DATA_URL, { cache: 'no-cache' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        if (!Array.isArray(data)) throw new Error('รูปแบบข้อมูลไม่ถูกต้อง');
+
+        records = buildRecords(data);
+        databaseStatus.className = 'database-status';
+        databaseStatus.innerHTML = `<span class="status-dot"></span><span>${records.length} รายการ · GitHub</span>`;
+        renderCategories();
+      } catch (error) {
+        console.error(error);
+        databaseStatus.className = 'database-status error';
+        databaseStatus.innerHTML = '<span class="status-dot"></span><span>เปิด data.json ไม่สำเร็จ</span>';
+        contentArea.innerHTML = '<div class="empty-state">เปิดฐานข้อมูลไม่สำเร็จ</div>';
+      }
+    }
+
+    function countGroup(groupKey) {
+      if (groupKey === 'ทั้งหมด') return records.length;
+      return records.filter((record) => record.majorGroup === groupKey).length;
+    }
+
+    function renderCategories() {
+      currentView = 'categories';
+      activeGroup = 'ทั้งหมด';
+      searchInput.value = '';
+      clearSearch.classList.add('hidden');
+
+      const groups = MAJOR_GROUPS.filter((group) => countGroup(group.key) > 0);
+      contentArea.innerHTML = `
+        <section class="category-panel">
+          <div class="panel-head">
+            <h2 class="panel-title">หมวดหมู่</h2>
+            <span class="total-count">${records.length} รายการ</span>
+          </div>
+          <div class="category-grid">
+            ${groups.map((group) => `
+              <button class="category-card" type="button" data-group="${escapeHtml(group.key)}">
+                <span class="category-icon" aria-hidden="true">${escapeHtml(group.icon)}</span>
+                <span class="category-text">
+                  <span class="category-name">${escapeHtml(group.label)}</span>
+                  <span class="category-count">${countGroup(group.key)} รายการ</span>
+                </span>
+              </button>
+            `).join('')}
+          </div>
+        </section>`;
+
+      contentArea.querySelectorAll('.category-card').forEach((button) => {
         button.addEventListener('click', () => {
-          activeCategory = button.dataset.category || 'ทั้งหมด';
-          categoryBar.querySelectorAll('.category-chip').forEach((chip) => chip.classList.toggle('active', chip === button));
-          if (currentQuery) runSearch();
+          activeGroup = button.dataset.group || 'ทั้งหมด';
+          currentView = 'results';
+          applyFilters();
         });
       });
     }
 
-    async function fetchJson(url, timeoutMs = 8000) {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), timeoutMs);
-      try {
-        const response = await fetch(url, { signal: controller.signal, cache: 'no-store' });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
-      } finally {
-        clearTimeout(timer);
-      }
-    }
+    function applyFilters() {
+      const query = normalizeText(searchInput.value);
+      clearSearch.classList.toggle('hidden', !query);
 
-    async function loadInitialData() {
-      try {
-        const localData = await fetchJson(LOCAL_DATA_URL, 5000);
-        setData(localData, 'ฐานข้อมูลใน GitHub');
-        window.setTimeout(() => syncRemote(false), 1200);
-        return;
-      } catch (localError) {
-        console.warn('Local data unavailable', localError);
-      }
-
-      try {
-        const cached = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-        if (Array.isArray(cached)) {
-          setData(cached, 'ข้อมูลสำรองในเครื่อง');
-          window.setTimeout(() => syncRemote(false), 500);
-          return;
-        }
-      } catch (cacheError) {
-        console.warn('Cache unavailable', cacheError);
-      }
-
-      try {
-        await syncRemote(true);
-      } catch (remoteError) {
-        showLoadError();
-      }
-    }
-
-    async function syncRemote(showProgress = true) {
-      syncBtn.classList.add('spinning');
-      if (showProgress) {
-        statusBar.className = 'status';
-        statusBar.textContent = 'กำลังตรวจสอบข้อมูลล่าสุดจาก Google Sheet…';
-      }
-      try {
-        const remoteData = await fetchJson(`${GAS_URL}?t=${Date.now()}`, 9000);
-        if (!Array.isArray(remoteData)) throw new Error('Remote data is not an array');
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData));
-        localStorage.setItem(STORAGE_TIME_KEY, new Date().toISOString());
-
-        const changed = JSON.stringify(remoteData) !== JSON.stringify(rawData);
-        if (changed || rawData.length === 0) {
-          rawData = remoteData;
-          indexedData = buildIndex(rawData);
-          buildCategories();
-          if (currentQuery) runSearch();
-        }
-        statusBar.className = 'status ok';
-        statusBar.textContent = `พร้อมใช้งาน ${remoteData.length} รายการ · ตรวจสอบข้อมูลล่าสุดแล้ว`;
-        return remoteData;
-      } catch (error) {
-        if (rawData.length > 0) {
-          statusBar.className = 'status warn';
-          statusBar.textContent = `ใช้งานได้ ${rawData.length} รายการ · ยังเชื่อมต่อ Google Sheet ไม่สำเร็จ`;
-          return rawData;
-        }
-        throw error;
-      } finally {
-        syncBtn.classList.remove('spinning');
-      }
-    }
-
-    function showLoadError() {
-      statusBar.className = 'status error';
-      statusBar.textContent = 'ไม่สามารถเปิดฐานข้อมูลได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือไฟล์ data.json';
-      contentArea.innerHTML = `
-        <div class="empty-card">
-          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 9v4m0 4h.01M10.3 4.3 2.8 17.1A2 2 0 0 0 4.5 20h15a2 2 0 0 0 1.7-2.9L13.7 4.3a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <strong>เปิดฐานข้อมูลไม่สำเร็จ</strong>
-          <p>ตรวจสอบว่าอัปโหลดไฟล์ทั้งหมดขึ้น GitHub แล้ว โดยเฉพาะ <b>data.json</b></p>
-        </div>`;
-    }
-
-    function renderWelcome() {
-      currentFiltered = [];
-      contentArea.innerHTML = `
-        <div class="empty-card">
-          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.8-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <strong>ค้นหาเกณฑ์คัดกรองได้ทันที</strong>
-          <p>พิมพ์ชื่อโรค ยา อาการ หัตถการ หรือเลือกหมวดหมู่ด้านบน</p>
-        </div>`;
-    }
-
-    function runSearch() {
-      const keyword = normalizeText(searchInput.value);
-      currentQuery = keyword;
-      $('clearInline').classList.toggle('hidden', !keyword);
-
-      if (!keyword) {
-        renderWelcome();
+      if (!query && activeGroup === 'ทั้งหมด' && currentView !== 'results') {
+        renderCategories();
         return;
       }
 
-      const terms = keyword.split(' ').filter(Boolean);
-      currentFiltered = indexedData.filter((record) => {
-        const categoryOk = activeCategory === 'ทั้งหมด' || record.category === activeCategory;
-        const queryOk = terms.every((term) => record.searchable.includes(term));
-        return categoryOk && queryOk;
+      const terms = query.split(' ').filter(Boolean);
+      filteredRecords = records.filter((record) => {
+        const groupMatches = activeGroup === 'ทั้งหมด' || record.majorGroup === activeGroup;
+        const queryMatches = terms.length === 0 || terms.every((term) => record.searchable.includes(term));
+        return groupMatches && queryMatches;
       });
-      renderResults();
+
+      renderResults(query);
     }
 
-    function renderResults() {
-      if (currentFiltered.length === 0) {
+    function renderResults(query = normalizeText(searchInput.value)) {
+      currentView = 'results';
+      const groupLabel = activeGroup === 'ทั้งหมด' ? (query ? 'ผลการค้นหา' : 'ทั้งหมด') : activeGroup;
+
+      if (filteredRecords.length === 0) {
         contentArea.innerHTML = `
-          <div class="empty-card">
-            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.8-3.8M8.5 8.5l5 5m0-5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            <strong>ไม่พบข้อมูล</strong>
-            <p>ลองใช้คำสั้นลง เช่น “ความดัน” “สัก” “ยา” หรือเปลี่ยนหมวดหมู่เป็น “ทั้งหมด”</p>
-          </div>`;
+          <div class="filter-bar">
+            <span class="active-filter">${escapeHtml(groupLabel)}</span>
+            <span class="result-count">0 รายการ</span>
+          </div>
+          <div class="empty-state">ไม่พบข้อมูล</div>`;
         return;
       }
 
       contentArea.innerHTML = `
-        <p class="result-count">พบ ${currentFiltered.length} รายการ</p>
+        <div class="filter-bar">
+          <span class="active-filter">${escapeHtml(groupLabel)}</span>
+          <span class="result-count">${filteredRecords.length} รายการ</span>
+        </div>
         <div class="result-list">
-          ${currentFiltered.map((record, index) => `
-            <button class="result-item" type="button" data-index="${index}">
+          ${filteredRecords.map((record) => `
+            <button class="result-item" type="button" data-id="${record.id}">
               <span>
-                <span class="badge">${escapeHtml(record.category)}</span>
+                <span class="result-group">${escapeHtml(record.majorGroup)}</span>
                 <h2 class="result-title">${escapeHtml(record.title)}</h2>
               </span>
               <svg class="chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -583,7 +729,7 @@
         </div>`;
 
       contentArea.querySelectorAll('.result-item').forEach((button) => {
-        button.addEventListener('click', () => renderDetail(Number(button.dataset.index)));
+        button.addEventListener('click', () => renderDetail(Number(button.dataset.id), true));
       });
     }
 
@@ -592,82 +738,125 @@
       return escaped.replace(/(^|\n)(\d+\.[^:\n\r]+[:：])/g, '$1<span class="subhead">$2</span>');
     }
 
-    function renderDetail(index) {
-      const record = currentFiltered[index];
+    function renderDetail(recordId, pushHistory) {
+      const record = records.find((item) => item.id === recordId);
       if (!record) return;
-      const item = record.item;
-      const criteria = getField(item, 'เกณฑ์การคัดกรอง', 3);
-      const deferral = getField(item, 'ระยะเวลางดบริจาค', 4);
-      const thaiScript = getField(item, 'TH Script', 5);
-      const englishScript = getField(item, 'Script (English)', 6);
 
-      $('searchSection').classList.add('hidden');
+      detailReturnScroll = window.scrollY;
+      currentView = 'detail';
+      const criteria = getField(record.item, 'เกณฑ์การคัดกรอง', 3);
+      const deferral = getField(record.item, 'ระยะเวลางดบริจาค', 4);
+
+      if (pushHistory) {
+        history.replaceState({
+          view: 'results',
+          group: activeGroup,
+          query: searchInput.value
+        }, '', location.pathname + location.search);
+        history.pushState({ view: 'detail', recordId }, '', `#item-${recordId}`);
+      }
+
       contentArea.innerHTML = `
-        <button id="backBtn" class="back-btn" type="button">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          กลับไปดูผลการค้นหา
-        </button>
+        <div class="detail-toolbar">
+          <button id="backBtn" class="back-button" type="button">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            ย้อนกลับ
+          </button>
+        </div>
         <article class="detail-card">
-          <span class="badge">${escapeHtml(record.category)}</span>
+          <span class="detail-group">${escapeHtml(record.majorGroup)}</span>
           <h2 class="detail-title">${escapeHtml(record.title)}</h2>
-          <section class="info-box">
-            <div class="section-label">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 11v5m0-8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <section class="deferral-card">
+            <h3 class="section-title">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              ระยะเวลางดบริจาค
+            </h3>
+            <div class="deferral-text preserve">${formatText(deferral)}</div>
+          </section>
+          <section class="criteria-card">
+            <h3 class="section-title">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 11l2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
               เกณฑ์การคัดกรอง
-            </div>
+            </h3>
             <div class="preserve">${formatText(criteria)}</div>
-            <div class="deferral">
-              <div class="section-label red">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                ระยะเวลางดบริจาค
-              </div>
-              ${formatText(deferral)}
-            </div>
-          </section>
-          <section class="script-box script-th">
-            <div class="section-label green">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3" stroke="currentColor" stroke-width="2"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3m-4 0h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              บทพูดเจ้าหน้าที่ (TH)
-            </div>
-            <div class="preserve">${thaiScript && thaiScript !== '-' ? formatText(thaiScript) : 'ไม่มีข้อมูล'}</div>
-          </section>
-          <section class="script-box script-en">
-            <div class="section-label blue">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h7m-3.5 0v2m-2.5 4c2.5 0 5-2 5-5m-5 5c1.2 0 2.3.5 3.2 1.2M14 19l3-8 3 8m-5-3h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              English Script
-            </div>
-            <div class="preserve">${englishScript && englishScript !== '-' ? escapeHtml(englishScript) : 'No script'}</div>
           </section>
         </article>`;
 
-      $('backBtn').addEventListener('click', () => {
-        $('searchSection').classList.remove('hidden');
+      $('backBtn').addEventListener('click', goBackFromDetail);
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+
+    function goBackFromDetail() {
+      if (location.hash.startsWith('#item-')) {
+        history.back();
+      } else {
         renderResults();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
+        window.scrollTo({ top: detailReturnScroll, behavior: 'auto' });
+      }
+    }
+
+    function returnHome() {
+      history.replaceState({ view: 'categories' }, '', location.pathname + location.search);
+      renderCategories();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function clearAll() {
-      searchInput.value = '';
-      currentQuery = '';
-      activeCategory = 'ทั้งหมด';
-      categoryBar.querySelectorAll('.category-chip').forEach((chip) => chip.classList.toggle('active', chip.dataset.category === 'ทั้งหมด'));
-      $('clearInline').classList.add('hidden');
-      $('searchSection').classList.remove('hidden');
-      renderWelcome();
-      searchInput.focus();
-    }
-
-    $('searchBtn').addEventListener('click', runSearch);
-    $('clearBtn').addEventListener('click', clearAll);
-    $('clearInline').addEventListener('click', clearAll);
-    syncBtn.addEventListener('click', () => syncRemote(true));
-    searchInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') runSearch();
-    });
     searchInput.addEventListener('input', () => {
-      $('clearInline').classList.toggle('hidden', !searchInput.value);
+      clearTimeout(searchTimer);
+      clearSearch.classList.toggle('hidden', !searchInput.value);
+      searchTimer = setTimeout(() => {
+        if (searchInput.value.trim()) {
+          activeGroup = currentView === 'categories' ? 'ทั้งหมด' : activeGroup;
+          applyFilters();
+        } else if (activeGroup === 'ทั้งหมด') {
+          renderCategories();
+        } else {
+          applyFilters();
+        }
+      }, 120);
+    });
+
+    searchInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        searchInput.blur();
+        activeGroup = currentView === 'categories' ? 'ทั้งหมด' : activeGroup;
+        applyFilters();
+      }
+    });
+
+    clearSearch.addEventListener('click', () => {
+      searchInput.value = '';
+      clearSearch.classList.add('hidden');
+      if (activeGroup === 'ทั้งหมด') renderCategories();
+      else applyFilters();
+      searchInput.focus();
+    });
+
+    $('homeBtn').addEventListener('click', returnHome);
+
+    window.addEventListener('popstate', (event) => {
+      if (event.state?.view === 'detail' && Number.isInteger(event.state.recordId)) {
+        renderDetail(event.state.recordId, false);
+        return;
+      }
+
+      if (event.state?.view === 'results') {
+        activeGroup = event.state.group || 'ทั้งหมด';
+        searchInput.value = event.state.query || '';
+        clearSearch.classList.toggle('hidden', !searchInput.value);
+        const terms = normalizeText(searchInput.value).split(' ').filter(Boolean);
+        filteredRecords = records.filter((record) => {
+          const groupMatches = activeGroup === 'ทั้งหมด' || record.majorGroup === activeGroup;
+          const queryMatches = terms.length === 0 || terms.every((term) => record.searchable.includes(term));
+          return groupMatches && queryMatches;
+        });
+        renderResults();
+        window.scrollTo({ top: detailReturnScroll, behavior: 'auto' });
+        return;
+      }
+
+      renderCategories();
     });
 
     function updateOnlineState() {
@@ -683,7 +872,8 @@
       });
     }
 
-    loadInitialData();
+    history.replaceState({ view: 'categories' }, '', location.pathname + location.search);
+    loadData();
   </script>
 </body>
 </html>
