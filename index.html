@@ -1,240 +1,689 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CNMI Blood Donor Criteria</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    
-    <style>
-        :root {
-            --primary-navy: #1a2a6c;
-            --medical-red: #d32f2f;
-            --soft-bg: #f0f2f5;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#174a7e">
+  <meta name="description" content="คู่มือค้นหาเกณฑ์คัดกรองผู้บริจาคโลหิต โรงพยาบาลรามาธิบดีจักรีนฤบดินทร์">
+  <title>คู่มือคัดกรองผู้บริจาคโลหิต | CNMI</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <style>
+    :root {
+      --navy: #174a7e;
+      --navy-deep: #10365d;
+      --blue: #2f72b7;
+      --red: #d9363e;
+      --green: #16825d;
+      --gold: #e7a71a;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #25313d;
+      --muted: #6c7a89;
+      --line: #e4eaf1;
+      --shadow: 0 14px 35px rgba(27, 61, 95, .12);
+      --radius: 22px;
+    }
 
-        body { 
-            font-family: 'Sarabun', sans-serif; 
-            background-color: var(--soft-bg); 
-            color: #2d3436; 
-        }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Sarabun", "Noto Sans Thai", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
 
-        .nav-header { 
-            background: linear-gradient(135deg, #1a2a6c 0%, #2a48df 100%); 
-            color: white; padding: 50px 20px 70px; text-align: center;
-            border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
-        }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+      background: linear-gradient(135deg, var(--navy-deep), var(--blue));
+      padding: max(26px, env(safe-area-inset-top)) 18px 80px;
+      text-align: center;
+    }
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+    }
+    .hero::before { width: 180px; height: 180px; right: -55px; top: -80px; }
+    .hero::after { width: 120px; height: 120px; left: -45px; bottom: -45px; }
+    .brand {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 13px;
+      text-align: left;
+    }
+    .brand-logo {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.2);
+      flex: 0 0 auto;
+    }
+    .brand h1 { margin: 0; font-size: clamp(1.28rem, 4vw, 1.72rem); line-height: 1.25; }
+    .brand p { margin: 5px 0 0; opacity: .84; font-size: .9rem; }
 
-        /* กล่องค้นหาหน้าตาคล้ายเดิม */
-        .search-container { 
-            background: white; padding: 30px; border-radius: 24px; 
-            margin-top: -45px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
+    .shell {
+      width: min(930px, calc(100% - 28px));
+      margin: -48px auto 0;
+      padding-bottom: 54px;
+      position: relative;
+      z-index: 2;
+    }
+    .search-card,
+    .detail-card,
+    .empty-card {
+      background: var(--card);
+      border: 1px solid rgba(228,234,241,.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .search-card { padding: 22px; }
+    .search-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .search-label { font-weight: 800; color: var(--navy); }
+    .sync-button {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--navy);
+      display: grid;
+      place-items: center;
+    }
+    .sync-button:hover { background: #f4f8fc; }
+    .sync-button.spinning svg { animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-        .search-input { 
-            border-radius: 12px; padding: 15px; 
-            border: 2px solid #eee; font-size: 1.1rem;
-            margin-bottom: 15px;
-        }
+    .search-wrap { position: relative; }
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      color: #8190a1;
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      min-height: 56px;
+      border: 2px solid var(--line);
+      border-radius: 15px;
+      padding: 13px 46px 13px 48px;
+      outline: none;
+      color: var(--text);
+      background: #fbfcfe;
+      transition: border-color .18s, box-shadow .18s;
+    }
+    .search-input:focus {
+      border-color: #7eafe0;
+      box-shadow: 0 0 0 4px rgba(47,114,183,.12);
+      background: #fff;
+    }
+    .clear-inline {
+      position: absolute;
+      right: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: #7d8895;
+      display: grid;
+      place-items: center;
+    }
+    .clear-inline:hover { background: #eef3f8; }
 
-        /* ปรับปุ่มให้มาอยู่ด้านล่าง */
-        .btn-row { display: flex; gap: 10px; }
+    .action-row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-top: 12px; }
+    .primary-btn,
+    .secondary-btn,
+    .back-btn {
+      border-radius: 14px;
+      min-height: 48px;
+      border: 0;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .primary-btn { color: #fff; background: linear-gradient(135deg, #df4149, #bf2630); box-shadow: 0 8px 18px rgba(217,54,62,.2); }
+    .secondary-btn { background: #fff; color: var(--navy); border: 2px solid var(--navy); }
+    .primary-btn:hover { filter: brightness(.98); transform: translateY(-1px); }
+    .secondary-btn:hover { background: #f3f8fc; }
 
-        .btn-search-main { 
-            background: linear-gradient(to right, #e53935, #d32f2f);
-            color: white; border-radius: 12px; padding: 12px; 
-            font-weight: 600; border: none; flex: 2;
-            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2);
-        }
+    .status {
+      margin-top: 12px;
+      min-height: 22px;
+      color: var(--muted);
+      font-size: .82rem;
+      text-align: center;
+    }
+    .status.ok { color: var(--green); }
+    .status.warn { color: #9a6800; }
+    .status.error { color: #b42730; }
 
-        .btn-clear-main { 
-            background: white; color: var(--primary-navy); 
-            border: 2px solid var(--primary-navy); 
-            border-radius: 12px; padding: 12px; 
-            font-weight: 600; flex: 1;
-            display: flex; align-items: center; justify-content: center; gap: 5px;
-        }
+    .category-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 14px 1px 2px;
+      scrollbar-width: none;
+    }
+    .category-bar::-webkit-scrollbar { display: none; }
+    .category-chip {
+      white-space: nowrap;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--navy);
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+    .category-chip.active { color: #fff; background: var(--navy); border-color: var(--navy); }
 
-        /* การแสดงผลรายการ (List View) */
-        .list-item-card {
-            background: white; border-radius: 16px; padding: 20px;
-            margin-bottom: 12px; cursor: pointer; border: 1px solid #f0f0f0;
-            display: flex; justify-content: space-between; align-items: center;
-            transition: all 0.2s ease;
-        }
-        .list-item-card:hover { transform: translateX(5px); border-left: 5px solid var(--primary-navy); }
-        .list-item-card h5 { margin: 0; font-weight: 700; color: #333; }
-        .list-badge { background: rgba(26, 42, 108, 0.08); color: var(--primary-navy); padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
+    .content { margin-top: 18px; }
+    .result-count { margin: 0 3px 11px; color: var(--muted); font-size: .87rem; }
+    .result-list { display: grid; gap: 11px; }
+    .result-item {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 17px;
+      padding: 17px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 5px 16px rgba(31,61,91,.06);
+      transition: transform .16s, border-color .16s, box-shadow .16s;
+    }
+    .result-item:hover { transform: translateY(-2px); border-color: #9fc4e7; box-shadow: 0 10px 22px rgba(31,61,91,.1); }
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      background: #eaf3fb;
+      color: var(--navy);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+    .result-title { margin: 0; font-size: 1.03rem; line-height: 1.45; color: #25313d; }
+    .chevron { width: 22px; height: 22px; color: #8b98a7; }
 
-        /* หน้าละเอียด */
-        .detail-view { display: none; }
-        .btn-back { background: #fff; border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px; color: #555; font-weight: 600; margin-bottom: 20px; }
-        .full-card { border: none; border-radius: 25px; background: white; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
-        .criteria-box { background: #fffcf0; padding: 25px; border-radius: 18px; border-left: 6px solid #f1c40f; margin: 20px 0; }
-        
-        /* Newline & Bold */
-        .preserve-breaks { white-space: pre-wrap; line-height: 1.8; font-size: 1.05rem; }
-        .highlight-header { font-weight: 700; font-size: 1.2rem; color: var(--primary-navy); display: block; margin-top: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        
-        .script-box-th { border-left: 6px solid #27ae60; background: #f4faf6; padding: 20px; border-radius: 12px; margin-top: 15px; }
-        .script-box-en { border-left: 6px solid #2980b9; background: #f0f7ff; padding: 20px; border-radius: 12px; margin-top: 10px; font-style: italic; }
+    .empty-card { padding: 48px 20px; text-align: center; color: var(--muted); box-shadow: none; }
+    .empty-icon { width: 56px; height: 56px; color: #b5c0cc; margin-bottom: 8px; }
+    .empty-card p { margin: 7px 0 0; }
 
-        #status-bar { font-size: 0.8rem; text-align: center; margin-top: 15px; color: #999; }
-    </style>
+    .back-btn {
+      min-height: 44px;
+      padding: 0 16px;
+      margin-bottom: 12px;
+      background: #fff;
+      color: #4b5968;
+      border: 1px solid var(--line);
+    }
+    .detail-card { padding: clamp(19px, 4vw, 30px); }
+    .detail-title { margin: 5px 0 20px; color: var(--navy); font-size: clamp(1.4rem, 4vw, 2rem); line-height: 1.35; }
+    .info-box,
+    .script-box {
+      border-radius: 17px;
+      padding: 19px;
+      margin-top: 13px;
+    }
+    .info-box { background: #fffbec; border-left: 6px solid var(--gold); }
+    .script-th { background: #f0faf6; border-left: 6px solid #26a16f; }
+    .script-en { background: #f0f7ff; border-left: 6px solid #3788cf; }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 800;
+      margin-bottom: 9px;
+      color: var(--navy);
+      font-size: .88rem;
+    }
+    .section-label.red { color: #b92e37; }
+    .section-label.green { color: #167752; }
+    .section-label.blue { color: #286fae; }
+    .preserve { white-space: pre-wrap; line-height: 1.8; overflow-wrap: anywhere; }
+    .subhead {
+      display: block;
+      margin: 14px 0 5px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(23,74,126,.12);
+      color: var(--navy);
+      font-weight: 800;
+    }
+    .deferral {
+      margin-top: 17px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(185,46,55,.15);
+      color: #b92e37;
+      font-size: 1.12rem;
+      font-weight: 800;
+      line-height: 1.55;
+    }
+
+    .skeleton { display: grid; gap: 11px; }
+    .skeleton-row { height: 84px; border-radius: 17px; background: linear-gradient(90deg, #edf1f5 25%, #f7f9fb 37%, #edf1f5 63%); background-size: 400% 100%; animation: shimmer 1.2s infinite; }
+    @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+
+    .footer-note { text-align: center; color: #8794a1; font-size: .75rem; margin-top: 22px; }
+    .offline-pill { display: none; position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 10; color: #fff; background: #25313d; padding: 8px 13px; border-radius: 999px; font-size: .78rem; box-shadow: 0 8px 18px rgba(0,0,0,.18); }
+    body.offline .offline-pill { display: block; }
+
+    @media (max-width: 560px) {
+      .hero { padding-bottom: 70px; }
+      .shell { width: min(100% - 18px, 930px); margin-top: -43px; }
+      .search-card { padding: 16px; border-radius: 19px; }
+      .action-row { grid-template-columns: 1fr; }
+      .secondary-btn { min-height: 44px; }
+      .detail-card { border-radius: 19px; }
+      .result-item { padding: 15px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
 </head>
 <body>
-
-<div class="nav-header">
-    <h3 class="fw-bold m-0">คัดกรอง ผู้บริจาคโลหิต</h3>
-    <p class="opacity-75 small">โรงพยาบาลรามาธิบดีจักรีนฤบดินทร์</p>
-</div>
-
-<div class="container pb-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
-            
-            <div id="search-section" class="search-container animate__animated animate__fadeInUp">
-                <label class="fw-bold mb-2 text-muted small">ระบุคำที่ต้องการสืบค้น</label>
-                <input type="text" id="searchInput" class="form-control search-input" placeholder="พิมพ์ชื่อโรค, ยา, อาการ...">
-                
-                <div class="btn-row">
-                    <button id="searchBtn" class="btn-search-main">
-                        <i class="bi bi-search me-2"></i> ค้นหาข้อมูล
-                    </button>
-                    <button id="clearBtn" class="btn-clear-main">
-                        <i class="bi bi-arrow-clockwise"></i> ล้างข้อมูล
-                    </button>
-                </div>
-                <div id="status-bar">กำลังเชื่อมต่อฐานข้อมูล...</div>
-            </div>
-
-            <div id="list-area" class="mt-4">
-                <div class="text-center p-5 text-muted" id="welcome-msg">
-                    <i class="bi bi-search" style="font-size: 3rem; opacity: 0.2;"></i>
-                    <p class="mt-3">กรุณาระบุคำค้นหาเพื่อแสดงข้อมูล</p>
-                </div>
-            </div>
-
-            <div id="detail-area" class="detail-view mt-4 animate__animated animate__fadeIn"></div>
-
-        </div>
+  <header class="hero">
+    <div class="brand">
+      <img class="brand-logo" src="./icons/icon-192.png" alt="ไอคอนคู่มือคัดกรองผู้บริจาคโลหิต" width="58" height="58">
+      <div>
+        <h1>คู่มือคัดกรองผู้บริจาคโลหิต</h1>
+        <p>โรงพยาบาลรามาธิบดีจักรีนฤบดินทร์</p>
+      </div>
     </div>
-</div>
+  </header>
 
-<script>
+  <main class="shell">
+    <section id="searchSection" class="search-card" aria-label="ค้นหาเกณฑ์คัดกรอง">
+      <div class="search-head">
+        <label class="search-label" for="searchInput">ค้นหาโรค ยา อาการ หรือหัตถการ</label>
+        <button id="syncBtn" class="sync-button" type="button" title="อัปเดตข้อมูลจาก Google Sheet" aria-label="อัปเดตข้อมูลจาก Google Sheet">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.7-4.3L3 9m1-5v5h5M4 13a8 8 0 0 0 14.7 4.3L21 15m-1 5v-5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.8-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="searchInput" class="search-input" type="search" autocomplete="off" placeholder="เช่น ความดัน, สัก, ยาปฏิชีวนะ, ตั้งครรภ์">
+        <button id="clearInline" class="clear-inline hidden" type="button" aria-label="ล้างคำค้นหา">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="action-row">
+        <button id="searchBtn" class="primary-btn" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.8-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          ค้นหาข้อมูล
+        </button>
+        <button id="clearBtn" class="secondary-btn" type="button">ล้างข้อมูล</button>
+      </div>
+      <div id="statusBar" class="status" role="status" aria-live="polite">กำลังเปิดฐานข้อมูลในเครื่อง…</div>
+      <div id="categoryBar" class="category-bar hidden" aria-label="เลือกหมวดหมู่"></div>
+    </section>
+
+    <section id="contentArea" class="content" aria-live="polite">
+      <div class="skeleton" aria-hidden="true">
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
+      </div>
+    </section>
+
+    <p class="footer-note">ข้อมูลสำหรับช่วยปฏิบัติงานคัดกรอง ควรใช้ร่วมกับแนวทางของหน่วยงานและดุลยพินิจของผู้รับผิดชอบ</p>
+  </main>
+
+  <div class="offline-pill">กำลังใช้งานแบบออฟไลน์</div>
+
+  <script>
+    'use strict';
+
+    const APP_VERSION = '1.1.0';
+    const LOCAL_DATA_URL = './data.json';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxfT7UBjj3x6ywVOnIs2BnfRBTiAWMnHX4djVNWdioDv_KwVjCHtqXR62f2zsifK4-I/exec';
+    const STORAGE_KEY = 'cnmi_donor_criteria_cache_v2';
+    const STORAGE_TIME_KEY = 'cnmi_donor_criteria_cache_time_v2';
+
     let rawData = [];
+    let indexedData = [];
     let currentFiltered = [];
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxfT7UBjj3x6ywVOnIs2BnfRBTiAWMnHX4djVNWdioDv_KwVjCHtqXR62f2zsifK4-I/exec'; 
+    let activeCategory = 'ทั้งหมด';
+    let currentQuery = '';
 
-    window.onload = () => {
-        fetch(GAS_URL).then(res => res.json()).then(data => { 
-            rawData = data; 
-            document.getElementById('status-bar').innerHTML = `<i class="bi bi-check-circle text-success"></i> พร้อมใช้งาน ${data.length} รายการ`;
+    const $ = (id) => document.getElementById(id);
+    const searchInput = $('searchInput');
+    const contentArea = $('contentArea');
+    const statusBar = $('statusBar');
+    const categoryBar = $('categoryBar');
+    const syncBtn = $('syncBtn');
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function normalizeText(value) {
+      return String(value ?? '')
+        .normalize('NFKC')
+        .toLocaleLowerCase('th')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function getField(item, preferred, index) {
+      if (Object.prototype.hasOwnProperty.call(item, preferred)) return item[preferred];
+      return Object.values(item)[index] ?? '';
+    }
+
+    function buildIndex(data) {
+      return data.map((item, sourceIndex) => ({
+        item,
+        sourceIndex,
+        category: String(getField(item, 'หมวดหมู่', 0) || 'ไม่ระบุหมวดหมู่'),
+        title: String(getField(item, 'หัวข้อ', 1) || 'ข้อมูลคัดกรอง'),
+        searchable: normalizeText(Object.values(item).join(' | '))
+      }));
+    }
+
+    function setData(data, sourceLabel) {
+      if (!Array.isArray(data)) throw new Error('รูปแบบข้อมูลไม่ถูกต้อง');
+      rawData = data.filter((item) => item && typeof item === 'object');
+      indexedData = buildIndex(rawData);
+      buildCategories();
+      statusBar.className = 'status ok';
+      statusBar.textContent = `พร้อมใช้งาน ${rawData.length} รายการ · ${sourceLabel}`;
+      renderWelcome();
+    }
+
+    function buildCategories() {
+      const categories = ['ทั้งหมด', ...new Set(indexedData.map((x) => x.category))];
+      categoryBar.innerHTML = categories.map((category) => `
+        <button class="category-chip${category === activeCategory ? ' active' : ''}" type="button" data-category="${escapeHtml(category)}">${escapeHtml(category)}</button>
+      `).join('');
+      categoryBar.classList.remove('hidden');
+      categoryBar.querySelectorAll('.category-chip').forEach((button) => {
+        button.addEventListener('click', () => {
+          activeCategory = button.dataset.category || 'ทั้งหมด';
+          categoryBar.querySelectorAll('.category-chip').forEach((chip) => chip.classList.toggle('active', chip === button));
+          if (currentQuery) runSearch();
         });
-    };
-
-    function formatText(text) {
-        if (!text || text === "-") return text;
-        return text.replace(/(\d+\.[^:\n\r]+[:：])/g, '<span class="highlight-header">$1</span>');
+      });
     }
 
-    function doSearch() {
-        const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
-        if (!keyword) return;
-        currentFiltered = rawData.filter(item => JSON.stringify(item).toLowerCase().includes(keyword));
-        renderListView();
+    async function fetchJson(url, timeoutMs = 8000) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const response = await fetch(url, { signal: controller.signal, cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+      } finally {
+        clearTimeout(timer);
+      }
     }
 
-    function renderListView() {
-        const listArea = document.getElementById('list-area');
-        const detailArea = document.getElementById('detail-area');
-        const searchSection = document.getElementById('search-section');
+    async function loadInitialData() {
+      try {
+        const localData = await fetchJson(LOCAL_DATA_URL, 5000);
+        setData(localData, 'ฐานข้อมูลใน GitHub');
+        window.setTimeout(() => syncRemote(false), 1200);
+        return;
+      } catch (localError) {
+        console.warn('Local data unavailable', localError);
+      }
 
-        searchSection.style.display = 'block';
-        detailArea.style.display = 'none';
-        listArea.style.display = 'block';
-
-        if (currentFiltered.length === 0) {
-            listArea.innerHTML = '<div class="text-center p-5 text-muted">ไม่พบข้อมูล กรุณาลองใช้คำค้นหาอื่น</div>';
-            return;
+      try {
+        const cached = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        if (Array.isArray(cached)) {
+          setData(cached, 'ข้อมูลสำรองในเครื่อง');
+          window.setTimeout(() => syncRemote(false), 500);
+          return;
         }
+      } catch (cacheError) {
+        console.warn('Cache unavailable', cacheError);
+      }
 
-        listArea.innerHTML = `
-            <p class="text-muted small mb-3">พบผลลัพธ์ ${currentFiltered.length} รายการ:</p>
-            ${currentFiltered.map((item, index) => {
-                const v = Object.values(item);
-                return `
-                <div class="list-item-card animate__animated animate__fadeInUp" style="animation-delay: ${index * 0.05}s" onclick="renderDetailView(${index})">
-                    <div>
-                        <span class="list-badge mb-1 d-inline-block">${v[0] || 'ข้อมูล'}</span>
-                        <h5>${v[1]}</h5>
-                    </div>
-                    <i class="bi bi-chevron-right text-muted"></i>
-                </div>`;
-            }).join('')}`;
+      try {
+        await syncRemote(true);
+      } catch (remoteError) {
+        showLoadError();
+      }
     }
 
-    function renderDetailView(index) {
-        const item = currentFiltered[index];
-        const v = Object.values(item);
-        const listArea = document.getElementById('list-area');
-        const detailArea = document.getElementById('detail-area');
-        const searchSection = document.getElementById('search-section');
+    async function syncRemote(showProgress = true) {
+      syncBtn.classList.add('spinning');
+      if (showProgress) {
+        statusBar.className = 'status';
+        statusBar.textContent = 'กำลังตรวจสอบข้อมูลล่าสุดจาก Google Sheet…';
+      }
+      try {
+        const remoteData = await fetchJson(`${GAS_URL}?t=${Date.now()}`, 9000);
+        if (!Array.isArray(remoteData)) throw new Error('Remote data is not an array');
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData));
+        localStorage.setItem(STORAGE_TIME_KEY, new Date().toISOString());
 
-        searchSection.style.display = 'none';
-        listArea.style.display = 'none';
-        detailArea.style.display = 'block';
-
-        detailArea.innerHTML = `
-            <button class="btn-back" onclick="renderListView()">
-                <i class="bi bi-arrow-left me-2"></i> ย่อกลับไปดูรายการอื่น
-            </button>
-            <div class="full-card card p-4 shadow-sm">
-                <span class="list-badge mb-2" style="width:fit-content">${v[0] || 'CRITERIA'}</span>
-                <h2 class="fw-bold mb-4" style="color: var(--primary-navy)">${v[1]}</h2>
-                <div class="criteria-box">
-                    <div class="label fw-bold text-primary small mb-2"><i class="bi bi-info-circle-fill me-1"></i> เกณฑ์การคัดกรอง</div>
-                    <div class="preserve-breaks">${formatText(v[3])}</div>
-                    <div class="mt-4 pt-3 border-top">
-                        <div class="label fw-bold text-danger small mb-2"><i class="bi bi-clock-history me-1"></i> ระยะเวลางดบริจาค</div>
-                        <div class="text-danger fw-bold fs-4">${formatText(v[4])}</div>
-                    </div>
-                </div>
-                <div class="script-box-th">
-                    <div class="text-success fw-bold small mb-2"><i class="bi bi-mic-fill me-1"></i> บทพูดเจ้าหน้าที่ (TH)</div>
-                    <div class="preserve-breaks small text-muted">${v[5] && v[5] !== "-" ? formatText(v[5]) : 'ไม่มีข้อมูล'}</div>
-                </div>
-                <div class="script-box-en">
-                    <div class="text-primary fw-bold small mb-2"><i class="bi bi-translate me-1"></i> English Script</div>
-                    <div class="preserve-breaks small text-muted">${v[6] && v[6] !== "-" ? v[6] : 'No script'}</div>
-                </div>
-            </div>`;
-        window.scrollTo(0,0);
+        const changed = JSON.stringify(remoteData) !== JSON.stringify(rawData);
+        if (changed || rawData.length === 0) {
+          rawData = remoteData;
+          indexedData = buildIndex(rawData);
+          buildCategories();
+          if (currentQuery) runSearch();
+        }
+        statusBar.className = 'status ok';
+        statusBar.textContent = `พร้อมใช้งาน ${remoteData.length} รายการ · ตรวจสอบข้อมูลล่าสุดแล้ว`;
+        return remoteData;
+      } catch (error) {
+        if (rawData.length > 0) {
+          statusBar.className = 'status warn';
+          statusBar.textContent = `ใช้งานได้ ${rawData.length} รายการ · ยังเชื่อมต่อ Google Sheet ไม่สำเร็จ`;
+          return rawData;
+        }
+        throw error;
+      } finally {
+        syncBtn.classList.remove('spinning');
+      }
     }
 
-    // ฟังก์ชันล้างข้อมูลแบบสมบูรณ์
+    function showLoadError() {
+      statusBar.className = 'status error';
+      statusBar.textContent = 'ไม่สามารถเปิดฐานข้อมูลได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือไฟล์ data.json';
+      contentArea.innerHTML = `
+        <div class="empty-card">
+          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 9v4m0 4h.01M10.3 4.3 2.8 17.1A2 2 0 0 0 4.5 20h15a2 2 0 0 0 1.7-2.9L13.7 4.3a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <strong>เปิดฐานข้อมูลไม่สำเร็จ</strong>
+          <p>ตรวจสอบว่าอัปโหลดไฟล์ทั้งหมดขึ้น GitHub แล้ว โดยเฉพาะ <b>data.json</b></p>
+        </div>`;
+    }
+
+    function renderWelcome() {
+      currentFiltered = [];
+      contentArea.innerHTML = `
+        <div class="empty-card">
+          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.8-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <strong>ค้นหาเกณฑ์คัดกรองได้ทันที</strong>
+          <p>พิมพ์ชื่อโรค ยา อาการ หัตถการ หรือเลือกหมวดหมู่ด้านบน</p>
+        </div>`;
+    }
+
+    function runSearch() {
+      const keyword = normalizeText(searchInput.value);
+      currentQuery = keyword;
+      $('clearInline').classList.toggle('hidden', !keyword);
+
+      if (!keyword) {
+        renderWelcome();
+        return;
+      }
+
+      const terms = keyword.split(' ').filter(Boolean);
+      currentFiltered = indexedData.filter((record) => {
+        const categoryOk = activeCategory === 'ทั้งหมด' || record.category === activeCategory;
+        const queryOk = terms.every((term) => record.searchable.includes(term));
+        return categoryOk && queryOk;
+      });
+      renderResults();
+    }
+
+    function renderResults() {
+      if (currentFiltered.length === 0) {
+        contentArea.innerHTML = `
+          <div class="empty-card">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.8-3.8M8.5 8.5l5 5m0-5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <strong>ไม่พบข้อมูล</strong>
+            <p>ลองใช้คำสั้นลง เช่น “ความดัน” “สัก” “ยา” หรือเปลี่ยนหมวดหมู่เป็น “ทั้งหมด”</p>
+          </div>`;
+        return;
+      }
+
+      contentArea.innerHTML = `
+        <p class="result-count">พบ ${currentFiltered.length} รายการ</p>
+        <div class="result-list">
+          ${currentFiltered.map((record, index) => `
+            <button class="result-item" type="button" data-index="${index}">
+              <span>
+                <span class="badge">${escapeHtml(record.category)}</span>
+                <h2 class="result-title">${escapeHtml(record.title)}</h2>
+              </span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>`).join('')}
+        </div>`;
+
+      contentArea.querySelectorAll('.result-item').forEach((button) => {
+        button.addEventListener('click', () => renderDetail(Number(button.dataset.index)));
+      });
+    }
+
+    function formatText(value) {
+      const escaped = escapeHtml(value || '-');
+      return escaped.replace(/(^|\n)(\d+\.[^:\n\r]+[:：])/g, '$1<span class="subhead">$2</span>');
+    }
+
+    function renderDetail(index) {
+      const record = currentFiltered[index];
+      if (!record) return;
+      const item = record.item;
+      const criteria = getField(item, 'เกณฑ์การคัดกรอง', 3);
+      const deferral = getField(item, 'ระยะเวลางดบริจาค', 4);
+      const thaiScript = getField(item, 'TH Script', 5);
+      const englishScript = getField(item, 'Script (English)', 6);
+
+      $('searchSection').classList.add('hidden');
+      contentArea.innerHTML = `
+        <button id="backBtn" class="back-btn" type="button">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          กลับไปดูผลการค้นหา
+        </button>
+        <article class="detail-card">
+          <span class="badge">${escapeHtml(record.category)}</span>
+          <h2 class="detail-title">${escapeHtml(record.title)}</h2>
+          <section class="info-box">
+            <div class="section-label">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 11v5m0-8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              เกณฑ์การคัดกรอง
+            </div>
+            <div class="preserve">${formatText(criteria)}</div>
+            <div class="deferral">
+              <div class="section-label red">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                ระยะเวลางดบริจาค
+              </div>
+              ${formatText(deferral)}
+            </div>
+          </section>
+          <section class="script-box script-th">
+            <div class="section-label green">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3" stroke="currentColor" stroke-width="2"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3m-4 0h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              บทพูดเจ้าหน้าที่ (TH)
+            </div>
+            <div class="preserve">${thaiScript && thaiScript !== '-' ? formatText(thaiScript) : 'ไม่มีข้อมูล'}</div>
+          </section>
+          <section class="script-box script-en">
+            <div class="section-label blue">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h7m-3.5 0v2m-2.5 4c2.5 0 5-2 5-5m-5 5c1.2 0 2.3.5 3.2 1.2M14 19l3-8 3 8m-5-3h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              English Script
+            </div>
+            <div class="preserve">${englishScript && englishScript !== '-' ? escapeHtml(englishScript) : 'No script'}</div>
+          </section>
+        </article>`;
+
+      $('backBtn').addEventListener('click', () => {
+        $('searchSection').classList.remove('hidden');
+        renderResults();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function clearAll() {
-        document.getElementById('searchInput').value = ''; // ล้างข้อความในช่องเสิช
-        currentFiltered = []; // ล้างอาเรย์ที่เก็บผลลัพธ์
-        
-        // รีเซ็ตหน้ากลับไปเป็น Welcome Screen
-        document.getElementById('search-section').style.display = 'block';
-        document.getElementById('detail-area').style.display = 'none';
-        document.getElementById('list-area').style.display = 'block';
-        document.getElementById('list-area').innerHTML = `
-            <div class="text-center p-5 text-muted" id="welcome-msg">
-                <i class="bi bi-search" style="font-size: 3rem; opacity: 0.2;"></i>
-                <p class="mt-3">กรุณาระบุคำค้นหาเพื่อแสดงข้อมูล</p>
-            </div>`;
-        document.getElementById('searchInput').focus();
+      searchInput.value = '';
+      currentQuery = '';
+      activeCategory = 'ทั้งหมด';
+      categoryBar.querySelectorAll('.category-chip').forEach((chip) => chip.classList.toggle('active', chip.dataset.category === 'ทั้งหมด'));
+      $('clearInline').classList.add('hidden');
+      $('searchSection').classList.remove('hidden');
+      renderWelcome();
+      searchInput.focus();
     }
 
-    document.getElementById('searchBtn').onclick = doSearch;
-    document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') doSearch(); };
-    document.getElementById('clearBtn').onclick = clearAll;
-</script>
+    $('searchBtn').addEventListener('click', runSearch);
+    $('clearBtn').addEventListener('click', clearAll);
+    $('clearInline').addEventListener('click', clearAll);
+    syncBtn.addEventListener('click', () => syncRemote(true));
+    searchInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') runSearch();
+    });
+    searchInput.addEventListener('input', () => {
+      $('clearInline').classList.toggle('hidden', !searchInput.value);
+    });
+
+    function updateOnlineState() {
+      document.body.classList.toggle('offline', !navigator.onLine);
+    }
+    window.addEventListener('online', updateOnlineState);
+    window.addEventListener('offline', updateOnlineState);
+    updateOnlineState();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch((error) => console.warn('Service worker unavailable', error));
+      });
+    }
+
+    loadInitialData();
+  </script>
 </body>
 </html>
