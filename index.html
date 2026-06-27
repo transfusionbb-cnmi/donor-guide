@@ -532,10 +532,11 @@
 
   <div class="offline-pill">ใช้งานแบบออฟไลน์</div>
 
+  <script src="./config.js"></script>
   <script>
     'use strict';
 
-    const APP_VERSION = '1.2.1';
+    const APP_VERSION = '1.3.0';
     const DATA_URL = './data.json';
 
     const MAJOR_GROUPS = [
@@ -589,17 +590,98 @@
     }
 
     function detectMajorGroup(category, item) {
-      const text = normalizeText(`${category} ${getField(item, 'หัวข้อ', 1)} ${getField(item, 'คำที่ใช้ค้นหา', 2)}`);
+      const source = normalizeText(category);
+      const title = normalizeText(getField(item, 'หัวข้อ', 1));
+      const keywords = normalizeText(getField(item, 'คำที่ใช้ค้นหา', 2));
+      const text = `${source} ${title} ${keywords}`;
 
-      if (text.includes('ประวัติการเดินทาง') || text.includes('travel history') || text.includes('เดินทาง')) return 'การเดินทาง';
-      if (text.includes('สุขภาพสตรี') || text.includes('ตั้งครรภ์') || text.includes('ประจำเดือน') || text.includes('ฮอร์โมน')) return 'สุขภาพสตรี';
+      // ใช้หมวดหมู่ต้นฉบับเป็นหลัก เพื่อไม่ให้คำค้นหาบางคำพารายการไปผิดหมวด
+      if (source.includes('ประวัติการเดินทาง') || source.includes('travel history')) return 'การเดินทาง';
+      if (source.includes('สุขภาพสตรี') || source.includes('การตั้งครรภ์')) return 'สุขภาพสตรี';
+      if (source.includes('วัคซีน') || source.includes('vaccin') || source.includes('immunization')) return 'วัคซีน';
+      if (
+        source.includes('โรคติดเชื้อ') ||
+        source.includes('โรคติดต่อ') ||
+        source.includes('infectious') ||
+        source.includes('viral') ||
+        source.includes('ปรสิต') ||
+        source.includes('โปรโตซัว') ||
+        source.includes('tropical')
+      ) return 'โรคติดเชื้อ';
+      if (
+        source.includes('หัตถการ') ||
+        source.includes('ผ่าตัด') ||
+        source.includes('ทันตกรรม') ||
+        source.includes('ความงาม') ||
+        source.includes('procedure') ||
+        source.includes('surgery') ||
+        source.includes('dentistry') ||
+        source.includes('diagnostic')
+      ) return 'หัตถการและการผ่าตัด';
+      if (
+        source.includes('พฤติกรรม') ||
+        source.includes('สารเสพติด') ||
+        source.includes('สารควบคุม') ||
+        source.includes('อุบัติเหตุ') ||
+        source.includes('risk behavior') ||
+        source.includes('risk history')
+      ) return 'พฤติกรรมและความเสี่ยง';
+      if (
+        source.includes('ยา') ||
+        source.includes('medication') ||
+        source.includes('สมุนไพร') ||
+        source.includes('อาหารเสริม') ||
+        source.includes('วิตามิน') ||
+        source.includes('ฮอร์โมน')
+      ) return 'ยาและอาหารเสริม';
+      if (source.includes('ร่างกายพื้นฐาน')) return 'ร่างกายพื้นฐาน';
+      if (source.includes('คุณสมบัติทั่วไป')) return 'คุณสมบัติทั่วไป';
+
+      // เงื่อนไขสำรอง ใช้เมื่อข้อมูลไม่มีหมวดหมู่ต้นฉบับที่ชัดเจน
+      if (text.includes('ประวัติการเดินทาง') || text.includes('travel history')) return 'การเดินทาง';
+      if (
+        text.includes('ตั้งครรภ์') ||
+        text.includes('คลอดบุตร') ||
+        text.includes('ให้นมบุตร') ||
+        text.includes('ประจำเดือน') ||
+        text.includes('แท้ง') ||
+        text.includes('pregnancy') ||
+        text.includes('childbirth') ||
+        text.includes('breastfeeding')
+      ) return 'สุขภาพสตรี';
       if (text.includes('วัคซีน') || text.includes('vaccin') || text.includes('immunization')) return 'วัคซีน';
-      if (text.includes('โรคติดเชื้อ') || text.includes('infectious') || text.includes('viral') || text.includes('ปรสิต') || text.includes('โปรโตซัว') || text.includes('tropical')) return 'โรคติดเชื้อ';
-      if (text.includes('หัตถการ') || text.includes('ผ่าตัด') || text.includes('ทันตกรรม') || text.includes('ความงาม') || text.includes('procedure') || text.includes('surgery') || text.includes('dentistry') || text.includes('diagnostic')) return 'หัตถการและการผ่าตัด';
-      if (text.includes('พฤติกรรม') || text.includes('สารเสพติด') || text.includes('สารควบคุม') || text.includes('อุบัติเหตุ') || text.includes('risk behavior') || text.includes('risk history')) return 'พฤติกรรมและความเสี่ยง';
-      if (text.includes('ยา') || text.includes('medication') || text.includes('สมุนไพร') || text.includes('อาหารเสริม') || text.includes('วิตามิน')) return 'ยาและอาหารเสริม';
-      if (text.includes('ร่างกายพื้นฐาน')) return 'ร่างกายพื้นฐาน';
-      if (text.includes('คุณสมบัติทั่วไป')) return 'คุณสมบัติทั่วไป';
+      if (
+        text.includes('โรคติดเชื้อ') ||
+        text.includes('infectious') ||
+        text.includes('viral') ||
+        text.includes('ปรสิต') ||
+        text.includes('โปรโตซัว') ||
+        text.includes('tropical')
+      ) return 'โรคติดเชื้อ';
+      if (
+        text.includes('หัตถการ') ||
+        text.includes('ผ่าตัด') ||
+        text.includes('ทันตกรรม') ||
+        text.includes('procedure') ||
+        text.includes('surgery') ||
+        text.includes('dentistry') ||
+        text.includes('diagnostic')
+      ) return 'หัตถการและการผ่าตัด';
+      if (
+        text.includes('พฤติกรรม') ||
+        text.includes('สารเสพติด') ||
+        text.includes('สารควบคุม') ||
+        text.includes('risk behavior') ||
+        text.includes('risk history')
+      ) return 'พฤติกรรมและความเสี่ยง';
+      if (
+        text.includes('ยา') ||
+        text.includes('medication') ||
+        text.includes('สมุนไพร') ||
+        text.includes('อาหารเสริม') ||
+        text.includes('วิตามิน')
+      ) return 'ยาและอาหารเสริม';
+
       return 'สุขภาพและโรคประจำตัว';
     }
 
@@ -614,18 +696,77 @@
             item,
             sourceCategory,
             title,
-            majorGroup: detectMajorGroup(sourceCategory, item),
+            majorGroup: String(item.__major_group || detectMajorGroup(sourceCategory, item)),
             searchable: normalizeText(Object.values(item).join(' | '))
           };
         });
     }
 
+    function supabaseConfigured() {
+      const config = window.CNMI_CONFIG || {};
+      return Boolean(
+        config.SUPABASE_URL &&
+        config.SUPABASE_ANON_KEY &&
+        !config.SUPABASE_URL.includes('YOUR-PROJECT') &&
+        !config.SUPABASE_ANON_KEY.includes('YOUR_SUPABASE')
+      );
+    }
+
+    async function fetchSupabaseData() {
+      const config = window.CNMI_CONFIG;
+      const fields = [
+        'major_group','category','title_th','title_en','keywords',
+        'screening_criteria','deferral_period','source_reference',
+        'effective_date','notes','version','updated_at'
+      ].join(',');
+      const endpoint = `${config.SUPABASE_URL}/rest/v1/donor_guide_items` +
+        `?status=eq.published&select=${encodeURIComponent(fields)}` +
+        '&order=major_group.asc,title_th.asc';
+      const response = await fetch(endpoint, {
+        cache: 'no-store',
+        headers: {
+          apikey: config.SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${config.SUPABASE_ANON_KEY}`,
+          Accept: 'application/json'
+        }
+      });
+      if (!response.ok) throw new Error(`Supabase HTTP ${response.status}`);
+      const rows = await response.json();
+      if (!Array.isArray(rows) || rows.length === 0) throw new Error('Supabase ยังไม่มีข้อมูลเผยแพร่');
+      return rows.map((row) => ({
+        'หมวดหมู่': row.category || row.major_group || '',
+        'หัวข้อ': [row.title_th, row.title_en ? `(${row.title_en})` : ''].filter(Boolean).join(' '),
+        'คำที่ใช้ค้นหา': row.keywords || '',
+        'เกณฑ์การคัดกรอง': row.screening_criteria || '',
+        'ระยะเวลางดบริจาค': row.deferral_period || '',
+        'แหล่งอ้างอิง': row.source_reference || '',
+        'วันที่เริ่มใช้': row.effective_date || '',
+        'หมายเหตุ': row.notes || '',
+        '__major_group': row.major_group || ''
+      }));
+    }
+
+    async function fetchGithubFallback() {
+      const response = await fetch(DATA_URL, { cache: 'no-cache' });
+      if (!response.ok) throw new Error(`GitHub HTTP ${response.status}`);
+      const data = await response.json();
+      if (!Array.isArray(data)) throw new Error('รูปแบบข้อมูลสำรองไม่ถูกต้อง');
+      return data;
+    }
+
     async function loadData() {
       try {
-        const response = await fetch(DATA_URL, { cache: 'no-cache' });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        if (!Array.isArray(data)) throw new Error('รูปแบบข้อมูลไม่ถูกต้อง');
+        let data;
+        if (supabaseConfigured()) {
+          try {
+            data = await fetchSupabaseData();
+          } catch (supabaseError) {
+            console.warn('Supabase unavailable; using GitHub fallback.', supabaseError);
+            data = await fetchGithubFallback();
+          }
+        } else {
+          data = await fetchGithubFallback();
+        }
 
         records = buildRecords(data);
         databaseStatus.className = 'database-status';
@@ -634,7 +775,7 @@
       } catch (error) {
         console.error(error);
         databaseStatus.className = 'database-status error';
-        databaseStatus.innerHTML = '<span class="status-dot"></span><span>เปิด data.json ไม่สำเร็จ</span>';
+        databaseStatus.innerHTML = '<span class="status-dot"></span><span>เปิดข้อมูลไม่สำเร็จ</span>';
         contentArea.innerHTML = '<div class="empty-state">เปิดฐานข้อมูลไม่สำเร็จ</div>';
       }
     }
