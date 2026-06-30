@@ -1,6 +1,7 @@
-const CACHE_NAME = 'cnmi-donor-guide-public-v1.3.0';
+const CACHE_NAME = 'cnmi-donor-guide-public-v1.3.1-pwa105';
 const APP_SHELL = [
   './', './index.html', './config.js', './data.json', './manifest.webmanifest',
+  './install-helper.css?v=pwa105', './install-helper.js?v=pwa105',
   './favicon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'
 ];
 
@@ -32,7 +33,7 @@ async function networkFirst(request, fallbackUrl) {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
-  if (url.origin !== self.location.origin) return; // ไม่แคช Supabase API
+  if (url.origin !== self.location.origin) return;
 
   if (event.request.mode === 'navigate') {
     event.respondWith(networkFirst(event.request, './index.html'));
